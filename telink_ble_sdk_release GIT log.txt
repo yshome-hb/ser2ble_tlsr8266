@@ -1,0 +1,60 @@
+1、ble_module_sdk_release_v1.0_20161121
+     对应的git 源码时间点信息：sihui.wang 2016/11/21 10:56:36 
+     SHA-1: 4bb6c20dcef598d4ddf0954dde872131e15e9386
+  ---------------------------------------------------------------------------------
+     修订记录：
+     None
+
+2、ble_module_sdk_release_v1.1_20161215
+     对应的git 源码时间点信息：yafei.tu 2016/12/15 11:04:07 
+     SHA-1: 22a27783ffab812b349892f6eb5bc096844639d8
+     ---------------------------------------------------------------------------------
+     修订记录：
+     1、fix 360 f4 手机连接特性差问题，Master端发包winOffset有时候大于ConnInterval，不符合ble Spec协议规范!
+     2、连接建立时，收包window时序的修复；
+     3、修复bug：申请更新参数在irq中push fifo加密和 mainloop中加密重入。
+
+3、telink_ble_sdk_release_v3.0.0_20170331
+   对应的git源码时间点信息：	wzt  2017/3/28 18:56:37
+   SHA-1: b019bf07a347dadd1f9409be5232d5db3d1790a2
+   APP的时间点信息：		qiuwei.chen  2017/3/31 11:54:07
+   SHA-1：fca8afbf851311f979ee66b61d0ff61499b37372
+   ------------------------------------------------------------------------------------
+   修订记录：
+   1、新的协议栈架构
+   2、修复bug：8269编译选项有误，以前配置为8267。
+
+4、telink_ble_sdk_release_v3.1.0_20170509
+   对应的git源码时间点信息：sihui.wang  2017/5/8 14:02:29
+   SHA-1: 1bb2c141cec73b4e58e23fed56a3f6612b18b55c
+   APP的时间点信息：        qiuwei.chen  2017/5/9 10:40:45
+   SHA-1: 27fabec78b4334bc16da3f79d62413806b98f298
+   ------------------------------------------------------------------------------------
+   修订记录：
+   1、8266 remote
+   2、增加了 826x master kam dongle
+   3、增加了 826x hci
+   4、增加了几个feature：
+      4.1 slave在广播状态时可以scan（扫描）
+      4.2 slave在连接状态时可以scan（扫描）和advertise（广播）
+
+
+5、telink_ble_sdk_release_v3.2.0_20170906
+   对应的git源码时间点信息：sihui.wang  2017/8/30 16:17:07
+   SHA-1: 96d470db8d04642efe8c190ba014b28a1aef2148
+   APP的时间点信息：        sihui.wang  2017/9/6 14:26:24
+   SHA-1: cd5b77bf2bdff3a5f0b20b72ee7ef27848e4eb80
+   ------------------------------------------------------------------------------------
+   修订记录：
+   1、826x master kma dongle add SMP
+   2、add 8266 feature test
+   3、add 826x driver test
+   4、add 826x hid sample
+   5、add 8267/8269 IR demo
+   6、add external 32k crystal select
+   7、12M/16M crystal add external capacitance select
+   8、add PA
+   9、add emi test 
+   10、BLE add whitelist/resolving list
+
+
