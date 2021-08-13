@@ -31,8 +31,6 @@
 #include "ble_app.h"
 
 
-extern void main_loop (void);
-
 _attribute_ram_code_ void irq_handler(void)
 {
 	irq_blt_sdk_handler();
@@ -62,7 +60,9 @@ int main (void) {
 #if (MODULE_WATCHDOG_ENABLE)
 		wd_clear(); //clear watch dog
 #endif
-		main_loop ();
+
+		blt_sdk_main_loop();
+
 	}
 }
 

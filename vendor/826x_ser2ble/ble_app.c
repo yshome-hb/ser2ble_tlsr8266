@@ -1,191 +1,349 @@
 /********************************************************************************************************
- * @file     app.c
+ * @file     ble_app.h
  *
- * @brief    for TLSR chips
+ * @brief    ble application functions
  *
- * @author	 BLE Group
- * @date     May. 12, 2018
+ * @author	 ysshen
+ * @date     2021.08
  *
- * @par      Copyright (c) Telink Semiconductor (Shanghai) Co., Ltd.
+ * @par      Copyright (c) 2021, MIIIW Co., Ltd.
  *           All rights reserved.
- *
- *			 The information contained herein is confidential and proprietary property of Telink
- * 		     Semiconductor (Shanghai) Co., Ltd. and is available under the terms
- *			 of Commercial License Agreement between Telink Semiconductor (Shanghai)
- *			 Co., Ltd. and the licensee in separate contract or the terms described here-in.
- *           This heading MUST NOT be removed from this file.
- *
- * 			 Licensees are granted free, non-transferable use of the information in this
- *			 file under Mutual Non-Disclosure Agreement. NO WARRENTY of ANY KIND is provided.
- *
+ *           
  *******************************************************************************************************/
 
-#include "../../proj/tl_common.h"
-#include "../../proj_lib/rf_drv.h"
-#include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
-#include "../../proj/drivers/keyboard.h"
-#include "../../proj/drivers/battery.h"
-#include "../../proj_lib/ble/trace.h"
-#include "../../proj_lib/ble/blt_config.h"
-#include "../../proj_lib/ble/ble_smp.h"
-
+#include "ble_drv.h"
 #include "ble_app.h"
 
 
-#define     RC_DEEP_SLEEP_EN					1
-#define 	ADV_IDLE_ENTER_DEEP_TIME			60  //60 s
-#define 	CONN_IDLE_ENTER_DEEP_TIME			60  //60 s
+//GenericAccess Service ......................................................................
 
-#define 	MY_DIRECT_ADV_TMIE					2000000
+static const u16 primaryServiceUUID = GATT_UUID_PRIMARY_SERVICE;
+static const u16 gapServiceUUID = SERVICE_UUID_GENERIC_ACCESS;
+static const u16 characterUUID = GATT_UUID_CHARACTER;
+static const u16 gattServiceUUID = SERVICE_UUID_GENERIC_ATTRIBUTE;
+static const u16 clientCharacterCfgUUID = GATT_UUID_CLIENT_CHAR_CFG;
 
-
-#define     MY_APP_ADV_CHANNEL					BLT_ENABLE_ADV_ALL
-
-#define 	MY_ADV_INTERVAL_MIN					ADV_INTERVAL_30MS
-#define 	MY_ADV_INTERVAL_MAX					ADV_INTERVAL_35MS
-
-MYFIFO_INIT(blt_rxfifo, 64, 8);
-MYFIFO_INIT(blt_txfifo, 40, 16);
-
-//////////////////////////////////////////////////////////////////////////////
-//	 Adv Packet, Response Packet
-//////////////////////////////////////////////////////////////////////////////
-const u8	tbl_advData[] = {
-	 0x05, 0x09, 't', 'H', 'I', 'D',
-	 0x02, 0x01, 0x05, 							// BLE limited discoverable mode and BR/EDR not supported
-	 0x03, 0x19, 0x80, 0x01, 					// 384, Generic Remote Control, Generic category
-	 0x05, 0x02, 0x12, 0x18, 0x0F, 0x18,		// incomplete list of service class UUIDs (0x1812, 0x180F)
+static const u8 devNameChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(GenericAccess_DeviceName_DP_H), U16_HI(GenericAccess_DeviceName_DP_H),
+	U16_LO(GATT_UUID_DEVICE_NAME), U16_HI(GATT_UUID_DEVICE_NAME)
 };
 
-const u8	tbl_scanRsp [] = {
-		 0x05, 0x09, 't', 'H', 'I', 'D',
-	};
+static const u8 appearanceChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(GenericAccess_Appearance_DP_H), U16_HI(GenericAccess_Appearance_DP_H),
+	U16_LO(GATT_UUID_APPEARANCE), U16_HI(GATT_UUID_APPEARANCE)
+};
 
-int ui_mtu_size_exchange_req 	= 0;
-u32 interval_update_tick 		= 0;
+static const u8 connParamChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(CONN_PARAM_DP_H), U16_HI(CONN_PARAM_DP_H),
+	U16_LO(GATT_UUID_PERI_CONN_PARAM), U16_HI(GATT_UUID_PERI_CONN_PARAM)
+};
 
-int device_in_connection_state;
+static const u8	devName[] = {'t','H','I','D','\0'};
 
-u32		advertise_begin_tick;
+static const u16 appearance = GAP_APPEARE_UNKNOWN;
 
-u32 	latest_user_event_tick;
+static gap_periConnectParams_t periConnParameters = {20, 40, 0, 1000};
 
-u8 		user_task_flg;
-u8 		sendTerminate_before_enterDeep = 0;
 
-void 	app_switch_to_indirect_adv(u8 e, u8 *p, int n)
+//Gatt Service ......................................................................
+
+static const u8 serviceChangeChar[5] = {
+	CHAR_PROP_INDICATE,
+	U16_LO(GenericAttribute_ServiceChanged_DP_H), U16_HI(GenericAttribute_ServiceChanged_DP_H),
+	U16_LO(GATT_UUID_SERVICE_CHANGE), U16_HI(GATT_UUID_SERVICE_CHANGE)
+};
+
+static u16 serviceChangeVal[2] = {0};
+static u8 serviceChangeCCC[2] = {0, 0};
+
+
+//Device Service ......................................................................
+
+static const u16 deviceServiceUUID = SERVICE_UUID_DEVICE_INFORMATION;
+
+static const u8 pnPtrsChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(DeviceInformation_pnpID_DP_H), U16_HI(DeviceInformation_pnpID_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_PNP_ID), U16_HI(CHARACTERISTIC_UUID_PNP_ID)
+};
+
+static const u8	pnPtrs [] = {0x02, 0x8a, 0x24, 0x66, 0x82, 0x01, 0x00};
+
+
+//Battery Service ......................................................................
+
+static const u16 batServiceUUID = SERVICE_UUID_BATTERY;
+
+static const u8 batteryChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(BATT_LEVEL_INPUT_DP_H), U16_HI(BATT_LEVEL_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_BATTERY_LEVEL), U16_HI(CHARACTERISTIC_UUID_BATTERY_LEVEL)
+};
+
+static u8 batteryValue[1] = {99};
+static u8 batteryValueInCCC[2];
+
+//HID Service ......................................................................
+
+static const u16 hidServiceUUID           = SERVICE_UUID_HUMAN_INTERFACE_DEVICE;
+static const u16 hidProtocolModeUUID      = CHARACTERISTIC_UUID_HID_PROTOCOL_MODE;
+static const u16 hidReportUUID            = CHARACTERISTIC_UUID_HID_REPORT;
+static const u16 hidReportMapUUID         = CHARACTERISTIC_UUID_HID_REPORT_MAP;
+static const u16 hidbootKeyInReportUUID   = CHARACTERISTIC_UUID_HID_BOOT_KEY_INPUT;
+static const u16 hidbootKeyOutReportUUID  = CHARACTERISTIC_UUID_HID_BOOT_KEY_OUTPUT;
+static const u16 hidbootMouseInReportUUID = CHARACTERISTIC_UUID_HID_BOOT_MOUSE_INPUT;
+static const u16 hidinformationUUID       = CHARACTERISTIC_UUID_HID_INFORMATION;
+static const u16 hidCtrlPointUUID         = CHARACTERISTIC_UUID_HID_CONTROL_POINT;
+static const u16 hidIncludeUUID           = GATT_UUID_INCLUDE;
+
+static const u16 extReportRefUUID = GATT_UUID_EXT_REPORT_REF;
+static const u16 reportRefUUID = GATT_UUID_REPORT_REF;
+
+// HID attribute values
+static const u8 hidProtocolModeChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_PROTOCOL_MODE_DP_H), U16_HI(HID_PROTOCOL_MODE_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_PROTOCOL_MODE), U16_HI(CHARACTERISTIC_UUID_HID_PROTOCOL_MODE)
+};
+static const u8 hidbootKeyInReporChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(HID_BOOT_KB_REPORT_INPUT_DP_H), U16_HI(HID_BOOT_KB_REPORT_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_BOOT_KEY_INPUT), U16_HI(CHARACTERISTIC_UUID_HID_BOOT_KEY_INPUT)
+};
+static const u8 hidbootKeyOutReporChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_BOOT_KB_REPORT_OUTPUT_DP_H), U16_HI(HID_BOOT_KB_REPORT_OUTPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_BOOT_KEY_OUTPUT), U16_HI(CHARACTERISTIC_UUID_HID_BOOT_KEY_OUTPUT)
+};
+static const u8 hidReportCCinChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(HID_CONSUME_REPORT_INPUT_DP_H), U16_HI(HID_CONSUME_REPORT_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
+};
+static const u8 hidReportKEYinChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(HID_NORMAL_KB_REPORT_INPUT_DP_H), U16_HI(HID_NORMAL_KB_REPORT_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
+};
+static const u8 hidReportKEYoutChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_NORMAL_KB_REPORT_OUTPUT_DP_H), U16_HI(HID_NORMAL_KB_REPORT_OUTPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
+};
+static const u8 hidReportMapChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(HID_REPORT_MAP_DP_H), U16_HI(HID_REPORT_MAP_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT_MAP), U16_HI(CHARACTERISTIC_UUID_HID_REPORT_MAP)
+};
+static const u8 hidinformationChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(HID_INFORMATION_DP_H), U16_HI(HID_INFORMATION_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_INFORMATION), U16_HI(CHARACTERISTIC_UUID_HID_INFORMATION)
+};
+static const u8 hidCtrlPointChar[5] = {
+	CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_CONTROL_POINT_DP_H), U16_HI(HID_CONTROL_POINT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_CONTROL_POINT), U16_HI(CHARACTERISTIC_UUID_HID_CONTROL_POINT)
+};
+
+// Include attribute (Battery service)
+static u16 include[3] = {BATT_PS_H, BATT_LEVEL_INPUT_CCB_H, SERVICE_UUID_BATTERY};
+
+static u8 protocolMode = DFLT_HID_PROTOCOL_MODE;
+
+static u8 bootKeyInReport;
+static u8 bootKeyInReportCCC[2];
+
+static u8 bootKeyOutReport;
+
+static u8 reportConsumerControlIn[2];
+static u8 reportConsumerControlInCCC[2];
+static u8 reportRefConsumerControlIn[2] = { HID_REPORT_ID_CONSUME_CONTROL_INPUT, HID_REPORT_TYPE_INPUT };
+
+static u8 reportKeyIn[8];
+static u8 reportKeyInCCC[2];
+static u8 reportRefKeyIn[2] = { HID_REPORT_ID_KEYBOARD_INPUT, HID_REPORT_TYPE_INPUT };
+
+static u8 reportKeyOut[1];
+static u8 reportKeyOutCCC[2];
+static u8 reportRefKeyOut[2] = { HID_REPORT_ID_KEYBOARD_INPUT, HID_REPORT_TYPE_OUTPUT };
+
+static u16 extServiceUUID;
+
+const u8 hidInformation[] =
 {
+	U16_LO(0x0111), U16_HI(0x0111),    // bcdHID (USB HID version)
+	0x00,                              // bCountryCode
+	0x01                               // Flags
+};
 
-	bls_ll_setAdvParam( MY_ADV_INTERVAL_MIN, MY_ADV_INTERVAL_MAX,
-						ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
-						0,  NULL,
-						MY_APP_ADV_CHANNEL,
-						ADV_FP_NONE);
-
-	bls_ll_setAdvEnable(1);  //must: set adv enable
-}
+static u8 controlPoint;
 
 
-void 	ble_remote_terminate(u8 e,u8 *p, int n) //*p is terminate reason
+// HID Report Map characteristic
+// Keyboard report descriptor (using format for Boot interface descriptor)
+
+static const u8 reportMap[] =
 {
-	device_in_connection_state = 0;
-	if(*p == HCI_ERR_CONN_TIMEOUT){
+	//keyboard report in
+	0x05, 0x01,     // Usage Pg (Generic Desktop)
+	0x09, 0x06,     // Usage (Keyboard)
+	0xA1, 0x01,     // Collection: (Application)
+	0x85, HID_REPORT_ID_KEYBOARD_INPUT,     // Report Id (keyboard)
+				  //
+	0x05, 0x07,     // Usage Pg (Key Codes)
+	0x19, 0xE0,     // Usage Min (224)  VK_CTRL:0xe0
+	0x29, 0xE7,     // Usage Max (231)  VK_RWIN:0xe7
+	0x15, 0x00,     // Log Min (0)
+	0x25, 0x01,     // Log Max (1)
+				  //
+				  // Modifier byte
+	0x75, 0x01,     // Report Size (1)   1 bit * 8
+	0x95, 0x08,     // Report Count (8)
+	0x81, 0x02,     // Input: (Data, Variable, Absolute)
+				  //
+				  // Reserved byte
+	0x95, 0x01,     // Report Count (1)
+	0x75, 0x08,     // Report Size (8)
+	0x81, 0x01,     // Input: (Constant)
 
-	}
-	else if(*p == HCI_ERR_REMOTE_USER_TERM_CONN){  //0x13
+	//keyboard output
+	//5 bit led ctrl: NumLock CapsLock ScrollLock Compose kana
+	0x95, 0x05,    //Report Count (5)
+	0x75, 0x01,    //Report Size (1)
+	0x05, 0x08,    //Usage Pg (LEDs )
+	0x19, 0x01,    //Usage Min
+	0x29, 0x05,    //Usage Max
+	0x91, 0x02,    //Output (Data, Variable, Absolute)
+	//3 bit reserved
+	0x95, 0x01,    //Report Count (1)
+	0x75, 0x03,    //Report Size (3)
+	0x91, 0x01,    //Output (Constant)
 
-	}
-	else if(*p == HCI_ERR_CONN_TERM_MIC_FAILURE){
+	// Key arrays (6 bytes)
+	0x95, 0x06,     // Report Count (6)
+	0x75, 0x08,     // Report Size (8)
+	0x15, 0x00,     // Log Min (0)
+	0x25, 0xF1,     // Log Max (241)
+	0x05, 0x07,     // Usage Pg (Key Codes)
+	0x19, 0x00,     // Usage Min (0)
+	0x29, 0xf1,     // Usage Max (241)
+	0x81, 0x00,     // Input: (Data, Array)
 
-	}
-	else{
+	0xC0,            // End Collection
 
-	}
-#if (BLE_PM_ENABLE)
-	 //user has push terminate pkt to ble TX buffer before deepsleep
-	if(sendTerminate_before_enterDeep == 1){
-		sendTerminate_before_enterDeep = 2;
-	}
-#endif
 
-	advertise_begin_tick = clock_time();
-}
 
-void	task_connect (u8 e, u8 *p, int n)
+
+	//consumer report in
+	0x05, 0x0C,   // Usage Page (Consumer)
+	0x09, 0x01,   // Usage (Consumer Control)
+	0xA1, 0x01,   // Collection (Application)
+	0x85, HID_REPORT_ID_CONSUME_CONTROL_INPUT,   //     Report Id
+	0x75,0x10,     //global, report size 16 bits
+	0x95,0x01,     //global, report count 1
+	0x15,0x01,     //global, min  0x01
+	0x26,0x8c,0x02,  //global, max  0x28c
+	0x19,0x01,     //local, min   0x01
+	0x2a,0x8c,0x02,  //local, max    0x28c
+	0x81,0x00,     //main,  input data varible, absolute
+	0xc0,        //main, end collection
+
+};
+
+
+// TM : to modify
+static const attribute_t ble_attributes[] = {
+
+	{ATT_END_H - 1, 0,0,0,0,0},	// total num of attribute
+
+	// 0001 - 0007  gap
+	{7, ATT_PERMISSIONS_READ, 2, 2, (u8*)(&primaryServiceUUID), (u8*)(&gapServiceUUID), 0},
+
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(devNameChar), (u8*)(&characterUUID), (u8*)(devNameChar), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(devName), (u8*)(devNameChar+3), (u8*)(devName), 0},
+
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(appearanceChar), (u8*)(&characterUUID), (u8*)(appearanceChar), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(appearance), (u8*)(appearanceChar+3), (u8*)(&appearance), 0},
+
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(connParamChar), (u8*)(&characterUUID), (u8*)(connParamChar), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(periConnParameters), (u8*)(connParamChar+3), (u8*)(&periConnParameters), 0},
+
+	// 0008 - 000b gatt
+	{4, ATT_PERMISSIONS_READ, 2, 2, (u8*)(&primaryServiceUUID), (u8*)(&gattServiceUUID), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(serviceChangeChar), (u8*)(&characterUUID), (u8*)(serviceChangeChar), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(serviceChangeVal), (u8*)(serviceChangeChar+3), (u8*)(&serviceChangeVal), 0},
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(serviceChangeCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(serviceChangeCCC), 0},
+
+	// 000c - 000e  device Information Service
+	{3, ATT_PERMISSIONS_READ, 2, 2, (u8*)(&primaryServiceUUID), (u8*)(&deviceServiceUUID), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(pnPtrsChar), (u8*)(&characterUUID), (u8*)(pnPtrsChar), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(pnPtrs),(u8*)(pnPtrsChar+3), (u8*)(pnPtrs), 0},
+
+	////////////////////////////////////// Battery Service /////////////////////////////////////////////////////
+	// 002a - 002d
+	{4, ATT_PERMISSIONS_READ, 2, 2, (u8*)(&primaryServiceUUID), (u8*)(&batServiceUUID), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(batteryChar), (u8*)(&characterUUID), (u8*)(batteryChar), 0},				//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(batteryValue),(u8*)(batteryChar+3), (u8*)(batteryValue), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(batteryValueInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(batteryValueInCCC), 0},	//value
+
+	/////////////////////////////////// HID Service /////////////////////////////////////////////////////////
+	{HID_CONTROL_POINT_DP_H - HID_PS_H + 1, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&primaryServiceUUID), (u8*)(&hidServiceUUID), 0},
+
+	// 0010  include battery service
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(include), (u8*)(&hidIncludeUUID), (u8*)(include), 0},
+
+	// 0011 - 0012  protocol mode
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidProtocolModeChar), (u8*)(&characterUUID), (u8*)(hidProtocolModeChar), 0},		//prop
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(protocolMode), (u8*)(&hidProtocolModeUUID), (u8*)(&protocolMode), 0},	//value
+
+	// 0013 - 0015  boot keyboard input report (char-val-client)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidbootKeyInReporChar), (u8*)(&characterUUID), (u8*)(hidbootKeyInReporChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(bootKeyInReport), (u8*)(&hidbootKeyInReportUUID), (u8*)(&bootKeyInReport), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(bootKeyInReportCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(bootKeyInReportCCC), 0},	//value
+
+	// 0016 - 0017   boot keyboard output report (char-val)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidbootKeyOutReporChar), (u8*)(&characterUUID), (u8*)(hidbootKeyOutReporChar), 0},	//prop
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(bootKeyOutReport), (u8*)(&hidbootKeyOutReportUUID), (u8*)(&bootKeyOutReport), 0},	//value
+
+	// 0018 - 001b. consume report in: 4 (char-val-client-ref)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportCCinChar), (u8*)(&characterUUID), (u8*)(hidReportCCinChar), 0},			//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportConsumerControlIn), (u8*)(&hidReportUUID), (u8*)(reportConsumerControlIn), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR|ATT_PERMISSIONS_AUTHEN_WRITE, 2, sizeof(reportConsumerControlInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportConsumerControlInCCC), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportRefConsumerControlIn), (u8*)(&reportRefUUID), (u8*)(reportRefConsumerControlIn), 0},	//value
+
+	// 001c - 001f . keyboard report in : 4 (char-val-client-ref)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportKEYinChar), (u8*)(&characterUUID), (u8*)(hidReportKEYinChar), 0},		//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportKeyIn), (u8*)(&hidReportUUID), (u8*)(reportKeyIn), 0},		//value
+	{0, ATT_PERMISSIONS_RDWR|ATT_PERMISSIONS_AUTHEN_WRITE, 2, sizeof(reportKeyInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportKeyInCCC), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportRefKeyIn), (u8*)(&reportRefUUID), (u8*)(reportRefKeyIn), 0},	//value
+
+	// 0020 - 0022 . keyboard report out: 3 (char-val-ref)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportKEYoutChar), (u8*)(&characterUUID), (u8*)(hidReportKEYoutChar), 0}, //prop
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportKeyOut), (u8*)(&hidReportUUID), (u8*)(reportKeyOut), 0},			//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportRefKeyOut), (u8*)(&reportRefUUID), (u8*)(reportRefKeyOut), 0},	//value
+
+	// 0023 - 0025 . report map: 3
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportMapChar), (u8*)(&characterUUID), (u8*)(hidReportMapChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportMap), (u8*)(&hidReportMapUUID), (u8*)(reportMap), 0},				//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(extServiceUUID),(u8*)(&extReportRefUUID), (u8*)(&extServiceUUID), 0},	//value
+
+	// 0026 - 0027 . hid information: 2
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidinformationChar), (u8*)(&characterUUID), (u8*)(hidinformationChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidInformation), (u8*)(&hidinformationUUID), (u8*)(hidInformation), 0},		//value
+
+	// 0028 - 0029 . control point: 2
+	{0,ATT_PERMISSIONS_READ, 2,sizeof(hidCtrlPointChar),(u8*)(&characterUUID), (u8*)(hidCtrlPointChar), 0},	//prop
+	{0,ATT_PERMISSIONS_WRITE,2,sizeof(controlPoint),(u8*)(&hidCtrlPointUUID), (u8*)(&controlPoint), 0},		//value
+
+};
+
+void ble_app_init ()
 {
-	bls_l2cap_requestConnParamUpdate (8, 8, 99, 400);  //interval=10ms latency=99 timeout=4s
-
-	latest_user_event_tick = clock_time();
-
-	ui_mtu_size_exchange_req = 1;
-
-	device_in_connection_state = 1;//
-
-	interval_update_tick = clock_time() | 1; //none zero
-}
-
-
-//_attribute_ram_code_
-void blt_pm_proc(void)
-{
-
-#if (BLE_PM_ENABLE)
-
-		bls_pm_setSuspendMask (SUSPEND_ADV | SUSPEND_CONN);
-
-		user_task_flg = 0;
-
-		if(user_task_flg){
-			bls_pm_setManualLatency(0);
-		}
-
-
-	#if (RC_DEEP_SLEEP_EN) //deepsleep
-		if(sendTerminate_before_enterDeep == 1){ //sending Terminate and wait for ack before enter deepsleep
-			if(user_task_flg){  //detect key Press again,  can not enter deep now
-				sendTerminate_before_enterDeep = 0;
-				bls_ll_setAdvEnable(1);   //enable adv again
-			}
-		}
-		else if(sendTerminate_before_enterDeep == 2){  //Terminate OK
-			analog_write(DEEP_ANA_REG0, CONN_DEEP_FLG);
-			cpu_sleep_wakeup(DEEPSLEEP_MODE, PM_WAKEUP_PAD, 0);  //deepsleep
-		}
-
-		//adv 60s, deepsleep
-		if( blc_ll_getCurrentState() == BLS_LINK_STATE_ADV && !sendTerminate_before_enterDeep && \
-			clock_time_exceed(advertise_begin_tick , ADV_IDLE_ENTER_DEEP_TIME * 1000000))
-		{
-			cpu_sleep_wakeup(DEEPSLEEP_MODE, PM_WAKEUP_PAD, 0);  //deepsleep
-		}
-		//conn 60s no event(key/voice/led), enter deepsleep
-		else if( device_in_connection_state && !user_task_flg && \
-				clock_time_exceed(latest_user_event_tick, CONN_IDLE_ENTER_DEEP_TIME * 1000000) )
-		{
-
-			bls_ll_terminateConnection(HCI_ERR_REMOTE_USER_TERM_CONN); //push terminate cmd into ble TX buffer
-			bls_ll_setAdvEnable(0);   //disable adv
-			sendTerminate_before_enterDeep = 1;
-		}
-	#endif
-
-#endif  //END of  BLE_REMOTE_PM_ENABLE
-}
-
-
-_attribute_ram_code_ void  ble_remote_set_sleep_wakeup (u8 e, u8 *p, int n)
-{
-	if( blc_ll_getCurrentState() == BLS_LINK_STATE_CONN && ((u32)(bls_pm_getSystemWakeupTick() - clock_time())) > 80 * CLOCK_SYS_CLOCK_1MS){  //suspend time > 30ms.add gpio wakeup
-		bls_pm_setWakeupSource(PM_WAKEUP_CORE);  //gpio CORE wakeup suspend
-	}
-}
-
-
-void ble_app_init()
-{
-
-////////////////// BLE stack initialization ////////////////////////////////////
 	u8  tbl_mac [] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
 	u32 *pmac = (u32 *) CFG_ADR_MAC;
 	if (*pmac != 0xffffffff)
@@ -197,110 +355,9 @@ void ble_app_init()
 		flash_write_page (CFG_ADR_MAC, 6, tbl_mac);
 	}
 
-	////// Controller Initialization  //////////
-	blc_ll_initBasicMCU(tbl_mac);   //mandatory
+	ble_drv_init(tbl_mac);
 
-	blc_ll_initAdvertising_module(tbl_mac); 	//adv module: 		 mandatory for BLE slave,
-	blc_ll_initSlaveRole_module();				//slave module: 	 mandatory for BLE slave,
-
-
-
-	////// Host Initialization  //////////
-	extern void my_att_init ();
-	my_att_init (); //gatt initialization
-	blc_l2cap_register_handler (blc_l2cap_packet_receive);  	//l2cap initialization
-
-
- 	//// smp initialization ////
-	#if (BLE_REMOTE_SECURITY_ENABLE)
-		blc_smp_param_setBondingDeviceMaxNumber(4);  	//default is SMP_BONDING_DEVICE_MAX_NUM, can not bigger that this value
-														//and this func must call before bls_smp_enableParing
-		bls_smp_enableParing (SMP_PARING_CONN_TRRIGER );
-	#else
-		bls_smp_enableParing (SMP_PARING_DISABLE_TRRIGER );
-	#endif
-
-	//HID_service_on_android7p0_init();  //hid device on android 7.0/7.1
-
-
-
-	///////////////////// USER application initialization ///////////////////
-	bls_ll_setAdvData( (u8 *)tbl_advData, sizeof(tbl_advData) );
-	bls_ll_setScanRspData( (u8 *)tbl_scanRsp, sizeof(tbl_scanRsp));
-
-
-	////////////////// config adv packet /////////////////////
-	#if (BLE_REMOTE_SECURITY_ENABLE)
-		u8 bond_number = blc_smp_param_getCurrentBondingDeviceNumber();  //get bonded device number
-		smp_param_save_t  bondInfo;
-		if(bond_number)   //at least 1 bonding device exist
-		{
-			blc_smp_param_loadByIndex( bond_number - 1, &bondInfo);  //get the latest bonding device (index: bond_number-1 )
-
-		}
-
-		if(bond_number)   //set direct adv
-		{
-			//set direct adv
-			u8 status = bls_ll_setAdvParam( MY_ADV_INTERVAL_MIN, MY_ADV_INTERVAL_MAX,
-											ADV_TYPE_CONNECTABLE_DIRECTED_LOW_DUTY, OWN_ADDRESS_PUBLIC,
-											bondInfo.peer_addr_type,  bondInfo.peer_addr,
-											MY_APP_ADV_CHANNEL,
-											ADV_FP_NONE);
-			if(status != BLE_SUCCESS) { write_reg8(0x8000, 0x11); 	while(1); }  //debug: adv setting err
-
-			//it is recommended that direct adv only last for several seconds, then switch to indirect adv
-			bls_ll_setAdvDuration(MY_DIRECT_ADV_TMIE, 1);
-			bls_app_registerEventCallback (BLT_EV_FLAG_ADV_DURATION_TIMEOUT, &app_switch_to_indirect_adv);
-
-		}
-		else   //set indirect adv
-	#endif
-		{
-			u8 status = bls_ll_setAdvParam(  MY_ADV_INTERVAL_MIN, MY_ADV_INTERVAL_MAX,
-											 ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
-											 0,  NULL,
-											 MY_APP_ADV_CHANNEL,
-											 ADV_FP_NONE);
-			if(status != BLE_SUCCESS) { write_reg8(0x8000, 0x11); 	while(1); }  //debug: adv setting err
-		}
-
-	bls_ll_setAdvEnable(1);  //adv enable
-	rf_set_power_level_index (RF_POWER_8dBm);
-
-	//ble event call back
-	bls_app_registerEventCallback (BLT_EV_FLAG_CONNECT, &task_connect);
-	bls_app_registerEventCallback (BLT_EV_FLAG_TERMINATE, &ble_remote_terminate);
-
-
-		///////////////////// Power Management initialization///////////////////
-	#if(BLE_PM_ENABLE)
-		blc_ll_initPowerManagement_module();
-		bls_pm_setSuspendMask (SUSPEND_ADV | SUSPEND_CONN);
-		bls_app_registerEventCallback (BLT_EV_FLAG_SUSPEND_ENTER, &ble_remote_set_sleep_wakeup);
-	#else
-		bls_pm_setSuspendMask (SUSPEND_DISABLE);
-	#endif
-
-	advertise_begin_tick = clock_time();
-
-}
-
-/////////////////////////////////////////////////////////////////////
-// main loop flow
-/////////////////////////////////////////////////////////////////////
-u32 tick_loop;
-
-
-void main_loop (void)
-{
-	tick_loop ++;
-
-
-	////////////////////////////////////// BLE entry /////////////////////////////////
-	blt_sdk_main_loop();
-
-	blt_pm_proc();
-
+	bls_att_setAttributeTable((u8 *)ble_attributes);
+	ble_start_advertis(devName);
 }
 

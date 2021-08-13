@@ -1,7 +1,7 @@
 /********************************************************************************************************
- * @file     ble_att.h
+ * @file     ble_drv.h
  *
- * @brief    ble attribute header file
+ * @brief    ble drivers header file
  *
  * @author	 ysshen
  * @date     2021.08
@@ -11,10 +11,12 @@
  *           
  *******************************************************************************************************/
 
-#ifndef _BLE_ATT_H_
-#define _BLE_ATT_H_
+#ifndef _BLE_DRV_H_
+#define _BLE_DRV_H_
 
 
+extern void ble_drv_init(u8 *addr);
+extern void ble_start_advertis(u8 *dev_name);
 
 
-#endif /* _BLE_ATT_H_ */
+#endif /* _BLE_DRV_H_ */
