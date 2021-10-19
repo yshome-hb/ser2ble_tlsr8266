@@ -21,19 +21,20 @@
  *******************************************************************************************************/
 
 #include "../../proj/tl_common.h"
-
 #include "../../proj/mcu/watchdog_i.h"
 #include "../../vendor/common/user_config.h"
 #include "../../proj_lib/rf_drv.h"
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
-
 #include "ble_app.h"
+#include "ys_uart.h"
 
 
 _attribute_ram_code_ void irq_handler(void)
 {
 	irq_blt_sdk_handler();
+
+	ys_uart_irq_handler();
 }
 
 int main (void) {
@@ -54,15 +55,17 @@ int main (void) {
 
 	ble_app_init ();
 
+	ys_uart_init();
+
     irq_enable();
 
 	while (1) {
 #if (MODULE_WATCHDOG_ENABLE)
 		wd_clear(); //clear watch dog
 #endif
-
 		blt_sdk_main_loop();
 
+		ys_uart_process();
 	}
 }
 
