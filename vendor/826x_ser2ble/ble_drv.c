@@ -26,7 +26,7 @@ MYFIFO_INIT(blt_txfifo, 40, 16);
 
 static u8 adv_data_raw[31] = {
 	0x02, 0x01, 0x05, 			// BLE limited discoverable mode and BR/EDR not supported
-	0x03, 0x19, 0x80, 0x01, 	// 384, Generic Remote Control, Generic category
+	0x03, 0x19, 0xc1, 0x03, 	// 384, Generic Remote Control, Generic category
 	0x03, 0x03, 0x12, 0x18,	// incomplete list of service class UUIDs (0x1812, 0x180F)
 	19, 0x09, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, };
 
@@ -110,10 +110,29 @@ void ble_start_advertis(u8 *dev_name)
 	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, dev_name, name_len);
 	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 1;
 
-	bls_ll_setAdvParam(ADV_INTERVAL_30MS, ADV_INTERVAL_35MS,
-					   ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
-					   BLE_ADDR_PUBLIC, NULL,
-					   BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
+//#if (BLE_REMOTE_SECURITY_ENABLE)
+#if (0)
+	u8 bond_number = blc_smp_param_getCurrentBondingDeviceNumber();  //get bonded device number
+	smp_param_save_t  bondInfo;
+	if(bond_number)   //at least 1 bonding device exist
+	{
+		blc_smp_param_loadByIndex( bond_number - 1, &bondInfo);  //get the latest bonding device (index: bond_number-1 )
+		bls_ll_setAdvParam(ADV_INTERVAL_30MS, ADV_INTERVAL_35MS,
+						ADV_TYPE_CONNECTABLE_DIRECTED_LOW_DUTY, OWN_ADDRESS_PUBLIC,
+						bondInfo.peer_addr_type,  bondInfo.peer_addr,
+						BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
+
+		//it is recommended that direct adv only last for several seconds, then switch to indirect adv
+		bls_ll_setAdvDuration(2000000, 1);
+	}
+	else
+#endif
+	{
+		bls_ll_setAdvParam(ADV_INTERVAL_30MS, ADV_INTERVAL_35MS,
+					   	ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
+					   	BLE_ADDR_PUBLIC, NULL,
+					   	BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
+	}
 
 	bls_ll_setAdvData( (u8 *)adv_data_raw, name_len + ADV_DEVICE_NAME_POS + 2);
 	bls_ll_setScanRspData(adv_data_raw + ADV_DEVICE_NAME_POS, name_len + 2);

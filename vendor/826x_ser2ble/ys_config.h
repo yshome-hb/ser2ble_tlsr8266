@@ -28,15 +28,15 @@ extern "C" {
 #endif
 
 /////////////////// MODULE /////////////////////////////////
-#define BLE_REMOTE_SECURITY_ENABLE      0
+#define BLE_REMOTE_SECURITY_ENABLE      1
 #define BLE_PM_ENABLE					0
 
 /////////////////// Clock  /////////////////////////////////
-#define CLOCK_SYS_TYPE  		CLOCK_TYPE_PLL	//  one of the following:  CLOCK_TYPE_PLL, CLOCK_TYPE_OSC, CLOCK_TYPE_PAD, CLOCK_TYPE_ADC
-#define CLOCK_SYS_CLOCK_HZ  	16000000
+#define CLOCK_SYS_TYPE  		    CLOCK_TYPE_PLL	//  one of the following:  CLOCK_TYPE_PLL, CLOCK_TYPE_OSC, CLOCK_TYPE_PAD, CLOCK_TYPE_ADC
+#define CLOCK_SYS_CLOCK_HZ  	    16000000
 
 //////////////////Extern Crystal Type///////////////////////
-#define CRYSTAL_TYPE			XTAL_12M		//  extern 12M crystal
+#define CRYSTAL_TYPE			    XTAL_12M		//  extern 12M crystal
 
 
 /////////////////// watchdog  //////////////////////////////
