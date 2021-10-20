@@ -14,6 +14,8 @@
 #ifndef _BLE_APP_H_
 #define _BLE_APP_H_
 
+#include "ys_config.h"
+
 #define REPORT_ID_KEYBOARD_INPUT_BLE       	1   //!< Keyboard input report ID
 #define REPORT_ID_CONSUMER_INPUT_BLE		2   //!< Consumer Control input report ID
 #define REPORT_ID_SYSTEM_INPUT_BLE			3   //!< System input report ID
@@ -51,6 +53,14 @@ typedef enum
 	BATT_LEVEL_INPUT_CD_H,					//UUID: 2803, 	VALUE:  			Prop: Read | Notify
 	BATT_LEVEL_INPUT_DP_H,					//UUID: 2A19 	VALUE: batVal
 	BATT_LEVEL_INPUT_CCB_H,					//UUID: 2902, 	VALUE: batValCCC
+
+#if (BLE_OTA_ENABLE)
+/**********OTA***********************************************************************************/
+	OTA_PS_H,								//UUID: 2800,	VALUE: telink ota service uuid
+	OTA_CMD_OUT_CD_H,						//UUID: 2803,	VALUE:				Prop: read | write_without_rsp	
+	OTA_CMD_OUT_DP_H,						//UUID: telink ota uuid,  VALUE: otaData
+	OTA_CMD_OUT_DESC_H,						//UUID: 2901,	VALUE: otaName
+#endif
 
 /********HID**************************************************************************************/
 	HID_PS_H, 								//UUID: 2800, 	VALUE: uuid 1812
@@ -90,7 +100,13 @@ typedef enum
 	HID_NKRO_REPORT_INPUT_DP_H,				//UUID: 2A4D, 	VALUE: reportKeyIn
 	HID_NKRO_REPORT_INPUT_CCB_H,			//UUID: 2902, 	VALUE: reportKeyInInCCC
 	HID_NKRO_REPORT_INPUT_REF_H, 			//UUID: 2908    VALUE: REPORT_ID_NKRO, TYPE_INPUT
-	
+
+	//mouse report in
+	HID_MOUSE_REPORT_INPUT_CD_H,			//UUID: 2803, 	VALUE:  			Prop: Read | Notify
+	HID_MOUSE_REPORT_INPUT_DP_H,			//UUID: 2A4D, 	VALUE: reportMouseIn
+	HID_MOUSE_REPORT_INPUT_CCB_H,			//UUID: 2902, 	VALUE: reportMouseInCCC
+	HID_MOUSE_REPORT_INPUT_REF_H,			//UUID: 2908    VALUE: REPORT_ID_MOUSE, TYPE_INPUT
+
 	// report map
 	HID_REPORT_MAP_CD_H,					//UUID: 2803, 	VALUE:  			Prop: Read
 	HID_REPORT_MAP_DP_H,					//UUID: 2A4B, 	VALUE: reportKeyIn

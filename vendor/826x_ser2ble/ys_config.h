@@ -30,6 +30,7 @@ extern "C" {
 /////////////////// MODULE /////////////////////////////////
 #define BLE_REMOTE_SECURITY_ENABLE      1
 #define BLE_PM_ENABLE					0
+#define BLE_OTA_ENABLE                  1
 
 /////////////////// Clock  /////////////////////////////////
 #define CLOCK_SYS_TYPE  		    CLOCK_TYPE_PLL	//  one of the following:  CLOCK_TYPE_PLL, CLOCK_TYPE_OSC, CLOCK_TYPE_PAD, CLOCK_TYPE_ADC

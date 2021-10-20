@@ -61,6 +61,16 @@ _attribute_ram_code_ static void ble_remote_set_sleep_wakeup (u8 e, u8 *p, int n
 	}
 }
 
+static void ble_ota_start_cb(void)
+{
+	bls_ota_setTimeout(60*1000000);
+}
+
+static void ble_ota_end_cb(int result)
+{
+
+}
+
 void ble_drv_init(u8 *addr)
 {
 ////////////////// BLE stack initialization ////////////////////////////////////
@@ -98,6 +108,13 @@ void ble_drv_init(u8 *addr)
 	bls_pm_setSuspendMask (SUSPEND_DISABLE);
 #endif
 
+#if (BLE_OTA_ENABLE)
+	////////////////// OTA relative ////////////////////////
+	bls_ota_clearNewFwDataArea(); //must
+	bls_ota_registerStartCmdCb(ble_ota_start_cb);
+	bls_ota_registerResultIndicateCb(ble_ota_end_cb);
+#endif
+
 }
 
 void ble_start_advertis(u8 *dev_name)
@@ -110,8 +127,7 @@ void ble_start_advertis(u8 *dev_name)
 	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, dev_name, name_len);
 	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 1;
 
-//#if (BLE_REMOTE_SECURITY_ENABLE)
-#if (0)
+#if (BLE_REMOTE_SECURITY_ENABLE)
 	u8 bond_number = blc_smp_param_getCurrentBondingDeviceNumber();  //get bonded device number
 	smp_param_save_t  bondInfo;
 	if(bond_number)   //at least 1 bonding device exist

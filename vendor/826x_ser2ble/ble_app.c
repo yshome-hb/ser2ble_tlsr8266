@@ -12,6 +12,7 @@
  *******************************************************************************************************/
 
 #include "../../proj_lib/ble/ll/ll.h"
+#include "../../proj_lib/ble/service/ble_ll_ota.h"
 #include "ble_drv.h"
 #include "ble_app.h"
 
@@ -131,6 +132,11 @@ static const u8 reportNkroChar[5] = {
 	U16_LO(HID_NKRO_REPORT_INPUT_DP_H), U16_HI(HID_NKRO_REPORT_INPUT_DP_H),
 	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
 };
+static const u8 reportMouseChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(HID_MOUSE_REPORT_INPUT_DP_H), U16_HI(HID_MOUSE_REPORT_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
+};
 
 static const u8 hidReportMapChar[5] = {
 	CHAR_PROP_READ,
@@ -171,6 +177,10 @@ static u8 reportRefSystemIn[2] = { REPORT_ID_SYSTEM_INPUT_BLE, HID_REPORT_TYPE_I
 static u8 reportNkroIn[8] = {0};
 static u8 reportNkroInCCC[2] = {0};
 static u8 reportRefNkroIn[2] = { REPORT_ID_NKRO_INPUT_BLE, HID_REPORT_TYPE_INPUT };
+
+static u8 reportMouseIn[5];
+static u8 reportMouseInCCC[2] = {0};
+static u8 reportRefMouseIn[2] = { REPORT_ID_MOUSE_INPUT_BLE, HID_REPORT_TYPE_INPUT };
 
 static int keyOutWrite(void* p)
 {
@@ -277,8 +287,74 @@ static const u8 hidReportMap[] =
 	0x75, 0x01,	 // Report Size (1)
 	0x81, 0x02,	 // Input: (Data, Array)	
 	0xC0,		 // End Collection
+
+/***************** mouse report in *****************/
+	0x05, 0x01,   // Usage Page (Generic Desktop)
+	0x09, 0x02,   // Usage (Mouse)
+	0xA1, 0x01,   // Collection (Application)
+	0x85, REPORT_ID_MOUSE_INPUT_BLE,  // Report Id
+	0x09, 0x01,   // Usage (Pointer)
+	0xA1, 0x00,   // Collection (Physical)
+	// ----------------------------  Buttons
+	0x05, 0x09,   // Usage Page (Buttons)
+	0x19, 0x01,   // Usage Minimum (01) - Button 1
+	0x29, 0x05,   // Usage Maximum (05) - Button 5
+	0x15, 0x00,   // Logical Minimum (0)
+	0x25, 0x01,   // Logical Maximum (1)
+	0x75, 0x01,   // Report Size (1)
+	0x95, 0x05,   // Report Count (5)
+	0x81, 0x02,   // Input (Data, Variable, Absolute) - Button states
+	0x75, 0x03,   // Report Size (3)
+	0x95, 0x01,   // Report Count (1)
+	0x81, 0x01,   // Input (Constant) - Padding or Reserved bits
+	// ----------------------------  X,Y position
+	0x05, 0x01,   // Usage Page (Generic Desktop Control)
+	0x09, 0x30,   // Usage (X)
+	0x09, 0x31,   // Usage (Y)
+	0x15, 0x81,   // Logical Minimum (-127)
+	0x25, 0x7F,   // Logical Maximum (127)
+	0x75, 0x08,   // Report Size (8)
+	0x95, 0x02,   // Report Count (2)
+	0x81, 0x06,   // Input (Data, Variable, Relative)
+	// ----------------------------  Vertical wheel
+	0x09, 0x38,	  // Usage (Wheel)
+	0x15, 0x81,   // Logical Minimum (-127)
+	0x25, 0x7F,   // Logical Maximum (127)
+  	0x35, 0x00,   // Physical Minimum (0) - reset physical
+  	0x45, 0x00,   // Physical maximum (0)	
+	0x75, 0x08,   // Report Size (8)
+	0x95, 0x01,   // Report Count (1)
+	0x81, 0x06,   // Input (Data, Variable, Relative)
+    // ----------------------------  Horizontal wheel
+    0x05, 0x0c,   // Usage Page (Consumer Devices)
+    0x0A, 0x38, 0x02, // Usage (AC Pan)
+    0x15, 0x81,   // Logical Minimum (-127)
+    0x25, 0x7F,   // Logical Maximum (127)
+    0x75, 0x08,   // Report Size (8)
+    0x95, 0x01,   // Report Count (1)
+    0x81, 0x06,   // Input (Data, Variable, Relative)
+
+	0xC0,		  // End Collection
+	0xC0,		  // End Collection
 };
 
+#if (BLE_OTA_ENABLE)
+//ota Service ......................................................................
+
+static const u8 otaServiceUUID[16] = TELINK_OTA_UUID_SERVICE;
+static const u16 userDescUUID = GATT_UUID_CHAR_USER_DESC;
+
+static const u8 otaDataChar[19] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
+ 	U16_LO(OTA_CMD_OUT_DP_H), U16_HI(OTA_CMD_OUT_DP_H),
+	//TELINK_SPP_DATA_OTA,
+	0x12,0x2B,0x0d,0x0c,0x0b,0x0a,0x09,0x08,0x07,0x06,0x05,0x04,0x03,0x02,0x01,0x00
+};
+
+static u8 otaData = 0x00;
+static const u8 otaName[] = {'O', 'T', 'A'};
+
+#endif
 
 // TM : to modify
 static const attribute_t hidkb_attributes[] = {
@@ -311,9 +387,18 @@ static const attribute_t hidkb_attributes[] = {
 	////////////////////////////////////// Battery Service /////////////////////////////////////////////////////
 	// 002a - 002d
 	{4, ATT_PERMISSIONS_READ, 2, 2, (u8*)(&primaryServiceUUID), (u8*)(&batServiceUUID), 0},
-	{0, ATT_PERMISSIONS_READ, 2, sizeof(batteryChar), (u8*)(&characterUUID), (u8*)(batteryChar), 0},				//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(batteryChar), (u8*)(&characterUUID), (u8*)(batteryChar), 0},	//prop
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(batteryValue),(u8*)(batteryChar+3), (u8*)(batteryValue), 0},	//value
 	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(batteryValueInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(batteryValueInCCC), 0},	//value
+
+#if (BLE_OTA_ENABLE)
+	////////////////////////////////////// OTA ////////////////////////////////////////////////////////////////
+	// 002e - 0031
+	{4, ATT_PERMISSIONS_READ, 2, sizeof(otaServiceUUID), (u8*)(&primaryServiceUUID), (u8*)(otaServiceUUID), 0},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(otaDataChar),(u8*)(&characterUUID), (u8*)(otaDataChar), 0},			//prop
+	{0, ATT_PERMISSIONS_RDWR, 16, sizeof(otaData), (u8*)(otaDataChar+3), (&otaData), &otaWrite, &otaRead},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(otaName), (u8*)(&userDescUUID), (u8*)(otaName), 0},
+#endif
 
 	/////////////////////////////////// HID Service /////////////////////////////////////////////////////////
 	{HID_CONTROL_POINT_DP_H - HID_PS_H + 1, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&primaryServiceUUID), (u8*)(&hidServiceUUID), 0},
@@ -340,7 +425,7 @@ static const attribute_t hidkb_attributes[] = {
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportConsumerChar), (u8*)(&characterUUID), (u8*)(reportConsumerChar), 0},			//prop
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportConsumerIn), (u8*)(reportConsumerChar+3), (u8*)(reportConsumerIn), 0},	//value
 	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportConsumerInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportConsumerInCCC), 0},	//value
-	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportRefConsumerIn), (u8*)(&reportRefUUID), (u8*)(reportRefConsumerIn), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportRefConsumerIn), (u8*)(&reportRefUUID), (u8*)(reportRefConsumerIn), 0},	//value
 
 	// 001e - 0021 . system report in : 4 (char-val-client-ref)
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportSystemChar), (u8*)(&characterUUID), (u8*)(reportSystemChar), 0},	//prop
@@ -352,7 +437,13 @@ static const attribute_t hidkb_attributes[] = {
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportNkroChar), (u8*)(&characterUUID), (u8*)(reportNkroChar), 0},		//prop
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportNkroIn), (u8*)(reportNkroChar+3), (u8*)(reportNkroIn), 0},		//value
 	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportNkroInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportNkroInCCC), 0},	//value
-	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportRefNkroIn), (u8*)(&reportRefUUID), (u8*)(reportRefNkroIn), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportRefNkroIn), (u8*)(&reportRefUUID), (u8*)(reportRefNkroIn), 0},	//value
+
+    // 002a - 002d . mouse report in : 4 (char-val-client-ref)
+    {0, ATT_PERMISSIONS_READ, 2, sizeof(reportMouseChar), (u8*)(&characterUUID), (u8*)(reportMouseChar), 0},	//prop
+    {0, ATT_PERMISSIONS_READ, 2, sizeof(reportMouseIn), (u8*)(reportMouseChar+3), (u8*)(reportMouseIn), 0},	//value
+    {0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportMouseInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportMouseInCCC), 0}, //value
+    {0, ATT_PERMISSIONS_READ, 2, sizeof(reportRefMouseIn), (u8*)(&reportRefUUID), (u8*)(reportRefMouseIn), 0},	//value
 
 	// 0023 - 0025 . report map: 3
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportMapChar), (u8*)(&characterUUID), (u8*)(hidReportMapChar), 0},	//prop
@@ -364,8 +455,8 @@ static const attribute_t hidkb_attributes[] = {
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidInformation), (u8*)(hidInformationChar+3), (u8*)(hidInformation), 0},	//value
 
 	// 0028 - 0029 . control point: 2
-	{0,ATT_PERMISSIONS_READ, 2, sizeof(hidCtrlPointChar), (u8*)(&characterUUID), (u8*)(hidCtrlPointChar), 0},	//prop
-	{0,ATT_PERMISSIONS_WRITE, 2, sizeof(hidControlPoint), (u8*)(hidCtrlPointChar+3), (u8*)(&hidControlPoint), 0},		//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidCtrlPointChar), (u8*)(&characterUUID), (u8*)(hidCtrlPointChar), 0},	//prop
+	{0, ATT_PERMISSIONS_WRITE, 2, sizeof(hidControlPoint), (u8*)(hidCtrlPointChar+3), (u8*)(&hidControlPoint), 0},	//value
 
 };
 
