@@ -52,13 +52,13 @@ static unsigned char   *tx_buff = NULL;
 void uart_set_tx_busy_flag(){
     uart_tx_busy_flag = 1;
     #if(UART_CONTINUE_DELAY_EN)
-    	uart_continue_delay_time = 0;
+    	uart_continue_delay_time = clock_time() | 1; // make sure not zero
     #endif
 }
 
 void uart_clr_tx_busy_flag(){
     #if(UART_CONTINUE_DELAY_EN)
-    	uart_continue_delay_time = clock_time() | 1; // make sure not zero
+    	uart_continue_delay_time = 0;
     #else
     	uart_tx_busy_flag = 0;
     #endif

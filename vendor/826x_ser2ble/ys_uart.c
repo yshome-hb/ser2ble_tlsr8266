@@ -25,20 +25,24 @@ __attribute__((aligned(4))) unsigned char uart_tx_buff[UART_TX_BUFF_SIZE]  = {0x
 
 _attribute_ram_code_ void ys_uart_irq_handler(void)
 {
-	unsigned char irqS = uart_IRQSourceGet(); // get the irq source and clear the irq.
-	if(irqS & UARTRXIRQ){
+	unsigned char irqS = reg_dma_rx_rdy0; // get the irq source and clear the irq.
+	if(irqS & FLD_DMA_UART_RX){
+		reg_dma_rx_rdy0 = FLD_DMA_UART_RX;
 		uart_rx_irq = 1;
 	}
 }
 
 void ys_uart_init(void)
 {
+	reg_dma_rx_rdy0 = FLD_DMA_UART_RX | FLD_DMA_UART_TX;
 	CLK16M_UART115200;
 
 	uart_RecBuffInit(uart_rec_buff, UART_RX_BUFF_SIZE);  //set uart rev buffer and buffer size
 	uart_txBuffInit(UART_TX_BUFF_SIZE);
 
 	UART_GPIO_CFG_PC6_PC7();
+
+	uart_set_tx_done_delay(2000);
 }
 
 void ys_uart_process(void)
@@ -46,10 +50,10 @@ void ys_uart_process(void)
 	if(uart_rx_irq){
 		uart_rx_irq = 0;
 		/*receive buffer,the first four bytes is the length information of received data.send the received data*/
-		while(!uart_Send(uart_rec_buff));
+		while(!uart_Send_kma(uart_rec_buff));
 		/*transmit buffer, the first four bytes is the length information of transmitting data.the DMA module will send the data based on the length.
 		* so the useful data start from the fifth byte and start to send to other device from the fifth byte.*/
-		while(!uart_Send(uart_tx_buff));
+		while(!uart_Send_kma(uart_tx_buff));
 	}
 }
 
