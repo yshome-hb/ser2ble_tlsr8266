@@ -33,25 +33,26 @@ static u8 adv_data_raw[31] = {
 
 static void ble_adv_duration_timeout_cb(u8 e, u8 *p, int n)
 {
-	// bls_ll_setAdvParam( MY_ADV_INTERVAL_MIN, MY_ADV_INTERVAL_MAX,
-	// 					ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
-	// 					0,  NULL,
-	// 					MY_APP_ADV_CHANNEL,
-	// 					ADV_FP_NONE);
+	bls_ll_setAdvParam(ADV_INTERVAL_30MS, ADV_INTERVAL_35MS,
+					ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
+					BLE_ADDR_PUBLIC, NULL,
+					BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
 
-	// bls_ll_setAdvEnable(1);  //must: set adv enable
+	bls_ll_setAdvEnable(1);  //must: set adv enable
 }
 
 static void ble_connect_cb(u8 e, u8 *p, int n)
 {
-	bls_l2cap_requestConnParamUpdate (8, 8, 99, 400);  //interval=10ms latency=99 timeout=4s
+	bls_l2cap_requestConnParamUpdate(BLE_CONN_INTERVAL_MIN, BLE_CONN_INTERVAL_MAX, 
+									BLE_CONN_LATENCY, BLE_CONN_TIMEOUT);
 	bls_l2cap_setMinimalUpdateReqSendingTime_after_connCreate(1000);
+
+	mini_printf("ble_connect_cb\r\n");
 }
 
 static void ble_terminate_cb(u8 e, u8 *p, int n) //*p is terminate reason
 {
-	//MW_LOG("ble_terminate_cb %d\r\n", *p);
-
+	mini_printf("ble_terminate_cb %d\r\n", *p);
 }
 
 _attribute_ram_code_ static void ble_remote_set_sleep_wakeup (u8 e, u8 *p, int n)

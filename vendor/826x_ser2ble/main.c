@@ -55,9 +55,15 @@ int main (void) {
 
 	ble_app_init ();
 
-	ys_uart_init();
+	//ys_uart_init();
+
+	device_led_init(GPIO_PD5, 1);
 
     irq_enable();
+
+	mini_printf("blt_sdk_main_loop\r\n");
+	mini_printf("blt_sdk_main_loop\r\n");
+	mini_printf("blt_sdk_main_loop\r\n");
 
 	while (1) {
 #if (MODULE_WATCHDOG_ENABLE)
@@ -65,7 +71,8 @@ int main (void) {
 #endif
 		blt_sdk_main_loop();
 
-		ys_uart_process();
+		//ys_uart_process();
+
 	}
 }
 

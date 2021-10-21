@@ -463,14 +463,15 @@ static const attribute_t hidkb_attributes[] = {
 void ble_app_init ()
 {
 	u8  tbl_mac [] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
-	u32 *pmac = (u32 *) CFG_ADR_MAC;
-	if (*pmac != 0xffffffff)
+	u32 *pmac = (volatile u32 *) CFG_ADR_MAC;
+	if (*pmac == U32_MAX)
 	{
-		memcpy (tbl_mac, pmac, 6);
+		generateRandomNum(sizeof(tbl_mac), tbl_mac);
+		flash_write_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
 	}
-	else{
-		tbl_mac[0] = (u8)rand();
-		flash_write_page (CFG_ADR_MAC, 6, tbl_mac);
+	else
+	{
+		flash_read_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
 	}
 
 	ble_drv_init(tbl_mac);
