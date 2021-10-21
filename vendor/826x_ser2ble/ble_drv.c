@@ -18,9 +18,6 @@
 #include "ble_drv.h"
 
 
-MYFIFO_INIT(blt_rxfifo, 64, 8);
-MYFIFO_INIT(blt_txfifo, 40, 16);
-
 #define ADV_DEVICE_NAME_POS   		11
 #define ADV_DEVICE_NAME_MAX_LEN  	18
 

@@ -17,6 +17,15 @@
 #include "ble_app.h"
 
 
+#define RX_FIFO_SIZE	64
+#define RX_FIFO_NUM		8
+
+#define TX_FIFO_SIZE	40
+#define TX_FIFO_NUM		16
+
+MYFIFO_INIT(blt_rxfifo, RX_FIFO_SIZE, RX_FIFO_NUM);
+MYFIFO_INIT(blt_txfifo, TX_FIFO_SIZE, TX_FIFO_NUM);
+
 //GenericAccess Service ......................................................................
 
 static const u16 primaryServiceUUID = GATT_UUID_PRIMARY_SERVICE;
@@ -125,7 +134,7 @@ static const u8 reportConsumerChar[5] = {
 static const u8 reportSystemChar[5] = {
 	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
 	U16_LO(HID_SYSTEM_REPORT_INPUT_DP_H), U16_HI(HID_SYSTEM_REPORT_INPUT_DP_H),
-	U16_LO(GATT_UUID_EXT_REPORT_REF), U16_HI(GATT_UUID_EXT_REPORT_REF)
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
 };
 static const u8 reportNkroChar[5] = {
 	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
@@ -325,14 +334,6 @@ static const u8 hidReportMap[] =
 	0x75, 0x08,   // Report Size (8)
 	0x95, 0x01,   // Report Count (1)
 	0x81, 0x06,   // Input (Data, Variable, Relative)
-    // ----------------------------  Horizontal wheel
-    0x05, 0x0c,   // Usage Page (Consumer Devices)
-    0x0A, 0x38, 0x02, // Usage (AC Pan)
-    0x15, 0x81,   // Logical Minimum (-127)
-    0x25, 0x7F,   // Logical Maximum (127)
-    0x75, 0x08,   // Report Size (8)
-    0x95, 0x01,   // Report Count (1)
-    0x81, 0x06,   // Input (Data, Variable, Relative)
 
 	0xC0,		  // End Collection
 	0xC0,		  // End Collection
@@ -412,7 +413,7 @@ static const attribute_t hidkb_attributes[] = {
 
 	// 0013 - 0015  normal keyboard input report (char-val-client-ref)
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportKeyboardInChar), (u8*)(&characterUUID), (u8*)(reportKeyboardInChar), 0},	//prop
-	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportKeyboardIn), (u8*)(reportKeyboardInChar+3), (u8*)(reportKeyboardIn), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportKeyboardIn), (u8*)(reportKeyboardInChar+3), (u8*)(reportKeyboardIn), 0},	//value
 	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportKeyboardInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportKeyboardInCCC), 0},	//value
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportRefKeyboardIn), (u8*)(&reportRefUUID), (u8*)(reportRefKeyboardIn), 0},   //value
 
@@ -479,4 +480,50 @@ void ble_app_init ()
 	bls_att_setAttributeTable((u8 *)hidkb_attributes);
 	ble_start_advertis(devName);
 }
+
+void ble_update_battery (u8 val)
+{
+	if(batteryValue[0] == val)
+		return;
+	
+	batteryValue[0] = val;
+    if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(BATT_LEVEL_INPUT_DP_H, &val, 1);
+}
+
+void ble_send_keyboard(u8* data)
+{
+   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(HID_KEYBOARD_REPORT_INPUT_DP_H, data, 8);
+}
+
+void ble_send_consumer(u16 data)
+{	
+   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(HID_CONSUMER_REPORT_INPUT_DP_H, (u8 *)&data, sizeof(data));
+}
+
+void ble_send_system(u16 data)
+{
+   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(HID_SYSTEM_REPORT_INPUT_DP_H, (u8 *)&data, sizeof(data));
+}
+
+void ble_send_nkro(u8* data)
+{
+   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(HID_NKRO_REPORT_INPUT_DP_H, data, 15);
+}
+
+void ble_send_mouse(u8* data)
+{
+   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
+		bls_att_pushNotifyData(HID_MOUSE_REPORT_INPUT_DP_H, data, 4);
+}
+
+u8 ble_keyboard_leds()
+{
+	return reportKeyboardOut[0];
+}
+
 

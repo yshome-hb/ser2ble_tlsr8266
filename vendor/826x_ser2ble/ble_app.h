@@ -139,7 +139,14 @@ typedef struct
 } gap_periConnectParams_t;
 
 
-extern void ble_app_init ();
+extern void ble_app_init();
+extern void ble_update_battery(u8 val);
+extern void ble_send_keyboard(u8* data);
+extern void ble_send_consumer(u16 data);
+extern void ble_send_system(u16 data);
+extern void ble_send_nkro(u8* data);
+extern void ble_send_mouse(u8* data);
+extern u8 ble_keyboard_leds();
 
 
 #endif /* _BLE_APP_H_ */

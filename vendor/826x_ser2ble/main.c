@@ -59,11 +59,15 @@ int main (void) {
 
 	device_led_init(GPIO_PD5, 1);
 
+#if (MODULE_WATCHDOG_ENABLE)
+    wd_stop();
+    wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT, CLOCK_SYS_CLOCK_1MS);
+    wd_start();
+#endif
+
     irq_enable();
 
-	mini_printf("blt_sdk_main_loop\r\n");
-	mini_printf("blt_sdk_main_loop\r\n");
-	mini_printf("blt_sdk_main_loop\r\n");
+	YS_LOG("main start\r\n");
 
 	while (1) {
 #if (MODULE_WATCHDOG_ENABLE)
@@ -73,6 +77,14 @@ int main (void) {
 
 		//ys_uart_process();
 
+    #if 0 //PRINT_DEBUG_INFO
+		static u32 tick = 0;
+		if (clock_time_exceed(tick, 500000))
+		{
+			tick = clock_time();
+			YS_LOG("status=%x,interval=%x,latency=%x,timeout=%x\r\n", blc_ll_getCurrentState(), bls_ll_getConnectionInterval(), bls_ll_getConnectionLatency(), bls_ll_getConnectionTimeout());
+		}
+    #endif
 	}
 }
 
