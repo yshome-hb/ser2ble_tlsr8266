@@ -29,7 +29,7 @@ extern "C" {
 
 /////////////////// MODULE /////////////////////////////////
 #define BLE_REMOTE_SECURITY_ENABLE      1
-#define BLE_PM_ENABLE					1
+#define BLE_PM_ENABLE					0
 #define BLE_OTA_ENABLE                  1
 
 /////////////////// Clock  /////////////////////////////////
@@ -40,6 +40,9 @@ extern "C" {
 #define MODULE_WATCHDOG_ENABLE		    0
 #define WATCHDOG_INIT_TIMEOUT		    500  //ms
 
+/////////////////// rf tx power //////////////////////////////
+#define DEFAULT_NORMAL_TX_POWER   	RF_POWER_8dBm
+
 /////////////////// product information //////////////////////////////
 #define ID_VENDOR				    0x248A
 #define ID_PRODUCT				    0x8266
@@ -47,7 +50,7 @@ extern "C" {
 
 /////////////////// PRINT DEBUG INFO ///////////////////////
 /* 826x module's pin simulate as a uart tx, Just for debugging */
-#define PRINT_DEBUG_INFO            1//open/close myprintf
+#define PRINT_DEBUG_INFO            0//open/close myprintf
 
 #if PRINT_DEBUG_INFO
 #define YS_LOG(fmt, ...)	        do { mini_printf("<%s> "fmt"\r\n", __FUNCTION__, ##__VA_ARGS__); } while(0)

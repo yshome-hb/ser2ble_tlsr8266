@@ -90,7 +90,7 @@ void ble_drv_init(u8 *addr)
 	bls_smp_enableParing (SMP_PARING_DISABLE_TRRIGER );
 #endif
 
-	rf_set_power_level_index (RF_POWER_8dBm);
+	rf_set_power_level_index (DEFAULT_NORMAL_TX_POWER);
 
 	//ble event call back
 	bls_app_registerEventCallback (BLT_EV_FLAG_CONNECT, &ble_connect_cb);

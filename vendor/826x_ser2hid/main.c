@@ -53,7 +53,7 @@ int main (void)
 
 	ble_app_init();
 
-	//ys_uart_init();
+	ys_uart_init();
 
 	device_led_init(GPIO_PD5, 1);
 
@@ -73,7 +73,7 @@ int main (void)
 #endif
 		blt_sdk_main_loop();
 
-		//ys_uart_process();
+		ys_uart_process();
 
     #if 0 //PRINT_DEBUG_INFO
 		static u32 tick = 0;

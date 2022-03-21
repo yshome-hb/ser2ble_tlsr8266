@@ -18,11 +18,12 @@
 #define UART_BUFF_SIZE      64
 
 __attribute__((aligned(4))) unsigned char uart_rx_buff[UART_BUFF_SIZE] = {0x00,0x00,0x00,0x00,}; // the first four byte is length to receive data.
-__attribute__((aligned(4))) unsigned char uart_tx_buff[UART_BUFF_SIZE] = {0x00,0x00,0x00,0x00,}; // the first four byte is length to send data.
+__attribute__((aligned(4))) unsigned char uart_tx_buff[UART_BUFF_SIZE] = {0x0b,0x00,0x00,0x00,}; // the first four byte is length to send data.
 
 __attribute__ ((weak)) int ys_uart_recv_handler(ysu_data_t *data)
 {
-	YS_LOG("rx len %d", data->dma_len);
+	memcpy(uart_tx_buff+4, data->data, data->dma_len);
+	ys_uart_send(data->dma_len);
 	return 0;
 }
 
@@ -53,7 +54,7 @@ unsigned char *ys_uart_get_txaddr(void)
 	return uart_tx_buff+4;
 }
 
-unsigned char mw_uart_send(unsigned char length)
+unsigned char ys_uart_send(unsigned char length)
 {
 	ysu_data_t *tx_data = (ysu_data_t *)uart_tx_buff;
 	tx_data->dma_len = length;
