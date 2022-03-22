@@ -18,7 +18,7 @@
 #define UART_BUFF_SIZE      64
 
 __attribute__((aligned(4))) unsigned char uart_rx_buff[UART_BUFF_SIZE] = {0x00,0x00,0x00,0x00,}; // the first four byte is length to receive data.
-__attribute__((aligned(4))) unsigned char uart_tx_buff[UART_BUFF_SIZE] = {0x0b,0x00,0x00,0x00,}; // the first four byte is length to send data.
+__attribute__((aligned(4))) unsigned char uart_tx_buff[UART_BUFF_SIZE] = {0x01,0x00,0x00,0x00,UART_MAGIC_BYTE}; // the first four byte is length to send data.
 
 __attribute__ ((weak)) int ys_uart_recv_handler(ysu_data_t *data)
 {

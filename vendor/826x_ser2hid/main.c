@@ -86,3 +86,48 @@ int main (void)
 	}
 }
 
+_attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
+{
+	static const u8 hid_release[16] = {0};
+    if((rx_data->dma_len < 2) || (rx_data->data[0] != UART_MAGIC_BYTE))
+        return 0;
+
+	if(rx_data->data[1] != (rx_data->dma_len - 2))
+		return 0;
+
+	// if(!ys_protocol_checksum(rx_data->data+2, rx_data->data[1]))
+	// 	return 0;
+
+	if(rx_data->data[1] == 1)
+	{
+		ble_send_system(rx_data->data[2]);
+	}
+	else if(rx_data->data[1] == 2)
+	{
+		ble_send_consumer((((u16)rx_data->data[3])<<8) | rx_data->data[2]);
+	}
+	else if(rx_data->data[1] == 8)
+	{
+		ble_send_keyboard(rx_data->data);
+	}
+	else if(rx_data->data[1] == 15)
+	{
+		ble_send_nkro(rx_data->data);
+	}
+	else if(rx_data->data[1] == 4)
+	{
+		ble_send_mouse(rx_data->data);
+	}
+	else if(rx_data->data[1] == 0)
+	{
+		ble_send_keyboard(hid_release);
+		ble_send_mouse(hid_release);
+		ble_send_nkro(hid_release);
+		ble_send_consumer(0);
+		ble_send_system(0);
+	}
+
+	ys_uart_send(1);
+
+	return 1;
+}

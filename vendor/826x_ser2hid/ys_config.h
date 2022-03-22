@@ -48,6 +48,8 @@ extern "C" {
 #define ID_PRODUCT				    0x8266
 #define ID_VERSION				    0x0100
 
+#define PRODUCT_NAME 			    SER2HID
+
 /////////////////// PRINT DEBUG INFO ///////////////////////
 /* 826x module's pin simulate as a uart tx, Just for debugging */
 #define PRINT_DEBUG_INFO            0//open/close myprintf

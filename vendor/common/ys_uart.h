@@ -14,6 +14,7 @@
 #ifndef _YS_UART_H_
 #define _YS_UART_H_
 
+#define UART_MAGIC_BYTE		0xA5
 
 typedef struct{
 	unsigned int dma_len;       // dma len must be 4 byte

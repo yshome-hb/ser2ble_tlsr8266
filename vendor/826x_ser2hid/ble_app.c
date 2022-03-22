@@ -52,7 +52,7 @@ static const u8 connParamChar[5] = {
 	U16_LO(GATT_UUID_PERI_CONN_PARAM), U16_HI(GATT_UUID_PERI_CONN_PARAM)
 };
 
-static const u8	devName[] = {'t','H','I','D','\0'};
+static const u8	devName[] = STRINGIFY(PRODUCT_NAME);
 
 static const u16 appearance = 0x03c1;
 
