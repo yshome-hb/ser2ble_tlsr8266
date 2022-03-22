@@ -44,6 +44,8 @@
 	#include  "../826x_driver_test/app_config.h"
 #elif (__PROJECT_8266_SER2HID__)
 	#include "../826x_ser2hid/ys_config.h"
+#elif (__PROJECT_8266_SER2BLE__)
+	#include "../826x_ser2ble/ys_config.h"
 #else
 	#include "../common/default_config.h"
 #endif

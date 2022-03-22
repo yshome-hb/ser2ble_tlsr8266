@@ -125,20 +125,6 @@ typedef enum
 }BLE_ATT_HANDLE_TYPE;
 
 
-typedef struct
-{
-    /** Minimum value for the connection event (interval. 0x0006 - 0x0C80 * 1.25 ms) */
-    u16 intervalMin;
-    /** Maximum value for the connection event (interval. 0x0006 - 0x0C80 * 1.25 ms) */
-    u16 intervalMax;
-    /** Number of LL latency connection events (0x0000 - 0x03e8) */
-    u16 latency;
-    /** Connection Timeout (0x000A - 0x0C80 * 10 ms) */
-    u16 timeout;
-
-} gap_periConnectParams_t;
-
-
 extern void ble_app_init();
 extern void ble_update_battery(u8 val);
 extern void ble_send_keyboard(u8* data);

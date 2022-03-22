@@ -54,7 +54,7 @@ unsigned char *ys_uart_get_txaddr(void)
 	return uart_tx_buff+4;
 }
 
-unsigned char ys_uart_send(unsigned char length)
+_attribute_ram_code_ unsigned char ys_uart_send(unsigned char length)
 {
 	ysu_data_t *tx_data = (ysu_data_t *)uart_tx_buff;
 	tx_data->dma_len = length;

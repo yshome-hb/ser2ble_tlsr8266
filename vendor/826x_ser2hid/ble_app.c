@@ -467,6 +467,14 @@ static const attribute_t hidkb_attributes[] = {
 
 void ble_app_init ()
 {
+#define ADV_DEVICE_NAME_POS   		11
+#define ADV_DEVICE_NAME_MAX_LEN  	18	
+	u8 adv_data_raw[31] = {
+		0x02, 0x01, 0x05, 			// BLE limited discoverable mode and BR/EDR not supported
+		0x03, 0x19, 0xc1, 0x03, 	// 384, Generic Remote Control, Generic category
+		0x03, 0x03, 0x12, 0x18,	// incomplete list of service class UUIDs (0x1812, 0x180F)
+		19, 0x09, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, };
+
 	u8  tbl_mac [] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
 	u32 *pmac = (volatile u32 *) CFG_ADR_MAC;
 	if (*pmac == U32_MAX)
@@ -480,9 +488,12 @@ void ble_app_init ()
 	}
 
 	ble_drv_init(tbl_mac);
-
 	bls_att_setAttributeTable((u8 *)hidkb_attributes);
-	ble_start_advertis(devName);
+
+	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, devName, strlen(devName));
+	adv_data_raw[ADV_DEVICE_NAME_POS] = strlen(devName) + 1;
+
+	ble_start_advertis(adv_data_raw, strlen(devName)+ADV_DEVICE_NAME_POS+2, adv_data_raw+ADV_DEVICE_NAME_POS, strlen(devName)+2);
 }
 
 void ble_update_battery (u8 val)

@@ -69,7 +69,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="vendor/531x_ble_remote|vendor/826x_pts_test|vendor/826x_beacon_detector|vendor/826x_ble_remote|vendor/826x_driver_test|vendor/826x_beacon|vendor/826x_beacon_pad|826x_beacon_pad (Configuration Pad for iBeacon)|vendor/8267_master|vendor/8267_spi_master|vendor/8267_js_remote|vendor/8267_beacon_pad|vendor/826x_ble_audio_mic_sdm|vendor/826x_master_kma_dongle|vendor/8267_master_kma_dongle|vendor/8267_mcu_rc|proj/simu|vendor/common/mouse_driver.c|vendor/8266_ble_audio_mic_sdm|vendor/ble_headphone|proj/app_xxx|vendor/8267_beacon|vendor/8267_driver_test|vendor/826x_module|vendor/8263_remote|vendor/8261_ble_weixin|vendor/common/led_cfg.c|proj/drivers/rf.c|vendor/8267_smp_test|vendor/blueLight|proj/drivers/rfhw.c|vendor/common/led_rx.c|vendor/8267_module|proj/contiki_xxx|vendor/8267_vin_remote|vendor/8266_module|vendor/bluelight|proj/telink_rf/tl_rf_audio.c|vendor/8263_selfie|proj/ext_drv/mouse_drv.c|vendor/tHID|vendor/km_sim|vendor/8266_host_controller|vendor/8266_ble_module|proj/drivers/mouse.c|vendor/emi|vendor/8267_ble_lite_SDK|vendor/8263_mesh_light|vendor/8266_host_dongle|tlsdk_hisense_final_alpha|vendor/8267_multi_mode|vendor/8267_ble_rc_demo|vendor/common/led_tx.c|vendor/8266_ota_boot|8266_ble_remote|vendor/826x_hci|vendor/8267_ble_master_kma_dongle|vendor/pktsniffer|vendor/common/km_ui.c|proj/drivers/somatic_sensor.c|vendor/8267_customer_remote|vendor/8263_ble_module|vendor/mouse|vendor/8266_antiloss|vendor/8267_btusb|vendor/audio_dongle|proj/unit_test|vendor/antiloss|proj/telink_rf/frame.c|vendor/8263_remote_philips/|proj/uip|vendor/826x_spi_module|vendor/8263_beacon|vendor/common/custom.c|vendor/flyco_8266_module|os/eventio|proj/contiki|vendor/826x_flyco_module|vendor/common/device_mouse.c|vendor/8267_ble_headphone|vendor/common/device_id.c|proj/telink_rf/tl_rf.c|vendor/8267_kt_remote|vendor/8266_ble_slave|vendor/826x_feature_test|drivers/spi_i.c|vendor/8263_tHID|os/ae.c|vendor/8266_ble_remote|vendor/ble_master_kma_dongle|vendor/8263_remote_pp|proj_lib/ble_ll|vendor/l2cap_test|vendor/dongle|vendor/826x_profile_test|freakz|vendor/8266_ble_selfie|vendor/8267_usb_host|proj/drivers/led.c|proj/telink_rf|vendor/ble_master|proj/ext_drv/mex.c|vendor/8267_audio_dongle|proj/drivers/ir.c|proj/os/sys.c|proj/ext_drv|vendor/8267_sniffer|vendor/8261_multi_mouse|proj/freakz|vendor/826x_ota_boot|vendor/8266_ble_master_kma_dongle|vendor/mesh_light|vendor/ble_slave|vendor/8263_antiloss|vendor/link_layer|proj/uip_xxx" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="vendor/826x_ser2ble|vendor/826x_pts_test|vendor/826x_beacon_detector|vendor/826x_ble_remote|vendor/826x_driver_test|vendor/826x_beacon|vendor/826x_beacon_pad|826x_beacon_pad (Configuration Pad for iBeacon)|vendor/8267_master|vendor/8267_spi_master|vendor/8267_js_remote|vendor/8267_beacon_pad|vendor/826x_ble_audio_mic_sdm|vendor/826x_master_kma_dongle|vendor/8267_master_kma_dongle|vendor/8267_mcu_rc|proj/simu|vendor/common/mouse_driver.c|vendor/8266_ble_audio_mic_sdm|vendor/ble_headphone|proj/app_xxx|vendor/8267_beacon|vendor/8267_driver_test|vendor/826x_module|vendor/8263_remote|vendor/8261_ble_weixin|vendor/common/led_cfg.c|proj/drivers/rf.c|vendor/8267_smp_test|vendor/blueLight|proj/drivers/rfhw.c|vendor/common/led_rx.c|vendor/8267_module|proj/contiki_xxx|vendor/8267_vin_remote|vendor/8266_module|vendor/bluelight|proj/telink_rf/tl_rf_audio.c|vendor/8263_selfie|proj/ext_drv/mouse_drv.c|vendor/tHID|vendor/km_sim|vendor/8266_host_controller|vendor/8266_ble_module|proj/drivers/mouse.c|vendor/emi|vendor/8267_ble_lite_SDK|vendor/8263_mesh_light|vendor/8266_host_dongle|tlsdk_hisense_final_alpha|vendor/8267_multi_mode|vendor/8267_ble_rc_demo|vendor/common/led_tx.c|vendor/8266_ota_boot|8266_ble_remote|vendor/826x_hci|vendor/8267_ble_master_kma_dongle|vendor/pktsniffer|vendor/common/km_ui.c|proj/drivers/somatic_sensor.c|vendor/8267_customer_remote|vendor/8263_ble_module|vendor/mouse|vendor/8266_antiloss|vendor/8267_btusb|vendor/audio_dongle|proj/unit_test|vendor/antiloss|proj/telink_rf/frame.c|vendor/8263_remote_philips/|proj/uip|vendor/826x_spi_module|vendor/8263_beacon|vendor/common/custom.c|vendor/flyco_8266_module|os/eventio|proj/contiki|vendor/826x_flyco_module|vendor/common/device_mouse.c|vendor/8267_ble_headphone|vendor/common/device_id.c|proj/telink_rf/tl_rf.c|vendor/8267_kt_remote|vendor/8266_ble_slave|vendor/826x_feature_test|drivers/spi_i.c|vendor/8263_tHID|os/ae.c|vendor/8266_ble_remote|vendor/ble_master_kma_dongle|vendor/8263_remote_pp|proj_lib/ble_ll|vendor/l2cap_test|vendor/dongle|vendor/826x_profile_test|freakz|vendor/8266_ble_selfie|vendor/8267_usb_host|proj/drivers/led.c|proj/telink_rf|vendor/ble_master|proj/ext_drv/mex.c|vendor/8267_audio_dongle|proj/drivers/ir.c|proj/os/sys.c|proj/ext_drv|vendor/8267_sniffer|vendor/8261_multi_mouse|proj/freakz|vendor/826x_ota_boot|vendor/8266_ble_master_kma_dongle|vendor/mesh_light|vendor/ble_slave|vendor/8263_antiloss|vendor/link_layer|proj/uip_xxx" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -159,7 +159,90 @@
 						<parser enabled="true"/>
 					</scannerInfoProvider>
 				</profile>
-				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.;com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.603386033;com.telink.tc32eclipse.compiler.TC32Win.input.570990866">
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533.;com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.291894792;com.telink.tc32eclipse.compiler.TC32Win.input.935598055">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533.">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -243,6 +326,581 @@
 					</profile>
 				</scannerConfigBuildInfo>
 				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.;com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.603386033;com.telink.tc32eclipse.compiler.TC32Win.input.570990866">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+			</storageModule>
+		</cconfiguration>
+		<cconfiguration id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533" moduleId="org.eclipse.cdt.core.settings" name="ser2ble">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="com.telink.tc32eclipse.buildArtefactType.app" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=com.telink.tc32eclipse.buildArtefactType.app,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" description="" id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533" name="ser2ble" parent="com.telink.tc32eclipse.configuration.app.release" postbuildStep="&quot;${workspace_loc:/${ProjName}}/tl_check_fw.sh&quot;   ${ConfigName}   ${ProjName}" prebuildStep="&quot;${workspace_loc:/${ProjName}}/getver.sh&quot;">
+					<folderInfo id="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533." name="/" resourcePath="">
+						<toolChain id="com.telink.tc32eclipse.toolchain.TC32Win.app.release.1448028719" name="TC32-GCC Toolchain" superClass="com.telink.tc32eclipse.toolchain.TC32Win.app.release">
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.app.release.158810478" name="Generate binary file for Flash memory" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.app.release"/>
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objdump.app.release.1031363443" name="Generate Extended Listing (Source + generated Assembler)" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objdump.app.release"/>
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.size.app.release.62138197" name="Print Size" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.size.app.release"/>
+							<targetPlatform id="com.telink.tc32eclipse.targetplatform.TC32Win.app.release.806741776" name="TC32 Cross-Target" superClass="com.telink.tc32eclipse.targetplatform.TC32Win.app.release"/>
+							<builder buildPath="${workspace_loc:/newArchitecture/Release}" id="com.telink.tc32eclipse.target.builder.TC32Win.app.release.1551316353" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU Make Builder" superClass="com.telink.tc32eclipse.target.builder.TC32Win.app.release"/>
+							<tool id="com.telink.tc32eclipse.tool.assembler.TC32Win.app.release.350762852" name="TC32 CC/Assembler" superClass="com.telink.tc32eclipse.tool.assembler.TC32Win.app.release">
+								<option id="com.telink.tc32eclipse.assembler.option.debug.level.1911918967" name="Generate Debugging Info" superClass="com.telink.tc32eclipse.assembler.option.debug.level" value="com.telink.tc32eclipse.assembler.option.debug.level.none" valueType="enumerated"/>
+								<option id="com.telink.tc32eclipse.asm.option.flags.230552118" name="Other GCC Flags" superClass="com.telink.tc32eclipse.asm.option.flags" value="-DMCU_CORE_8266" valueType="string"/>
+								<inputType id="com.telink.tc32eclipse.tool.assembler.input.2121495192" superClass="com.telink.tc32eclipse.tool.assembler.input"/>
+							</tool>
+							<tool command="tc32-elf-gcc -ffunction-sections -fdata-sections" id="com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.291894792" name="TC32 Compiler" superClass="com.telink.tc32eclipse.tool.compiler.TC32Win.app.release">
+								<option id="com.telink.tc32eclipse.compiler.option.debug.level.1753068605" name="Generate Debugging Info" superClass="com.telink.tc32eclipse.compiler.option.debug.level" value="com.telink.tc32eclipse.compiler.option.debug.level.none" valueType="enumerated"/>
+								<option id="com.telink.tc32eclipse.compiler.option.optimize.1767383942" name="Optimization Level" superClass="com.telink.tc32eclipse.compiler.option.optimize" value="com.telink.tc32eclipse.compiler.optimize.two" valueType="enumerated"/>
+								<option id="com.telink.tc32eclipse.compiler.option.otherflags.1377061167" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
+								<option id="com.telink.tc32eclipse.compiler.option.std.1779353757" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
+								<option id="com.telink.tc32eclipse.compiler.option.optimize.other.1024794826" name="Other Optimization Flags" superClass="com.telink.tc32eclipse.compiler.option.optimize.other" value="-finline-small-functions" valueType="string"/>
+								<option id="com.telink.tc32eclipse.compiler.option.optimize.packstruct.1561168670" name="Pack structs (-fpack-struct)" superClass="com.telink.tc32eclipse.compiler.option.optimize.packstruct" value="true" valueType="boolean"/>
+								<option id="com.telink.tc32eclipse.compiler.option.optimize.shortenums.1538722289" name="Short enums (-fshort-enums)" superClass="com.telink.tc32eclipse.compiler.option.optimize.shortenums" value="true" valueType="boolean"/>
+								<option id="com.telink.tc32eclipse.compiler.option.def.904747123" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CHIP_TYPE=CHIP_TYPE_8266"/>
+									<listOptionValue builtIn="false" value="__PROJECT_8266_SER2BLE__=1"/>
+								</option>
+								<option id="com.telink.tc32eclipse.compiler.option.incpath.1167578927" name="Include Paths (-I)" superClass="com.telink.tc32eclipse.compiler.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/proj/mcu}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/proj/mcu_spec}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/vendor/common}&quot;"/>
+								</option>
+								<inputType id="com.telink.tc32eclipse.compiler.TC32Win.input.935598055" name="C Source Files" superClass="com.telink.tc32eclipse.compiler.TC32Win.input"/>
+							</tool>
+							<tool command="tc32-elf-ld --gc-sections" id="com.telink.tc32eclipse.tool.linker.TC32Win.app.release.1385274811" name="TC32 C Linker" superClass="com.telink.tc32eclipse.tool.linker.TC32Win.app.release">
+								<option id="com.telink.tc32eclipse.linker.option.libs.699005363" name="Libraries (-l)" superClass="com.telink.tc32eclipse.linker.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="lt_8266"/>
+								</option>
+								<option id="com.telink.tc32eclipse.linker.option.libpath.1272069858" name="Libraries Path (-L)" superClass="com.telink.tc32eclipse.linker.option.libpath" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/proj_lib}&quot;"/>
+								</option>
+								<inputType id="com.telink.tc32eclipse.tool.linker.input.247695661" name="OBJ Files" superClass="com.telink.tc32eclipse.tool.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.telink.tc32eclipse.tool.archiver.TC32Win.base.818987348" name="TC32 Archiver" superClass="com.telink.tc32eclipse.tool.archiver.TC32Win.base"/>
+							<tool id="com.telink.tc32eclipse.tool.objdump.TC32Win.app.release.685033951" name="TC32 Create Extended Listing" superClass="com.telink.tc32eclipse.tool.objdump.TC32Win.app.release">
+								<option id="com.telink.tc32eclipse.objdump.option.output.408773033" name="Output Filename" superClass="com.telink.tc32eclipse.objdump.option.output" value="8266_hid_sample.lst" valueType="string"/>
+							</tool>
+							<tool id="com.telink.tc32eclipse.tool.objcopy.flash.TC32Win.app.release.1933575155" name="TC32 Create Flash image" superClass="com.telink.tc32eclipse.tool.objcopy.flash.TC32Win.app.release">
+								<option id="com.telink.tc32eclipse.objcopy.flash.option.output.1281989845" name="Output Filename" superClass="com.telink.tc32eclipse.objcopy.flash.option.output" value="" valueType="string"/>
+								<option id="com.telink.tc32eclipse.objcopy.option.flash.stdopts.1971213833" name="Options to create flash image" superClass="com.telink.tc32eclipse.objcopy.option.flash.stdopts" value="" valueType="string"/>
+							</tool>
+							<tool id="com.telink.tc32eclipse.tool.size.TC32Win.app.release.281456047" name="Print Size" superClass="com.telink.tc32eclipse.tool.size.TC32Win.app.release"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="vendor/826x_ser2hid|vendor/826x_pts_test|vendor/826x_beacon_detector|vendor/826x_ble_remote|vendor/826x_driver_test|vendor/826x_beacon|vendor/826x_beacon_pad|826x_beacon_pad (Configuration Pad for iBeacon)|vendor/8267_master|vendor/8267_spi_master|vendor/8267_js_remote|vendor/8267_beacon_pad|vendor/826x_ble_audio_mic_sdm|vendor/826x_master_kma_dongle|vendor/8267_master_kma_dongle|vendor/8267_mcu_rc|proj/simu|vendor/common/mouse_driver.c|vendor/8266_ble_audio_mic_sdm|vendor/ble_headphone|proj/app_xxx|vendor/8267_beacon|vendor/8267_driver_test|vendor/826x_module|vendor/8263_remote|vendor/8261_ble_weixin|vendor/common/led_cfg.c|proj/drivers/rf.c|vendor/8267_smp_test|vendor/blueLight|proj/drivers/rfhw.c|vendor/common/led_rx.c|vendor/8267_module|proj/contiki_xxx|vendor/8267_vin_remote|vendor/8266_module|vendor/bluelight|proj/telink_rf/tl_rf_audio.c|vendor/8263_selfie|proj/ext_drv/mouse_drv.c|vendor/tHID|vendor/km_sim|vendor/8266_host_controller|vendor/8266_ble_module|proj/drivers/mouse.c|vendor/emi|vendor/8267_ble_lite_SDK|vendor/8263_mesh_light|vendor/8266_host_dongle|tlsdk_hisense_final_alpha|vendor/8267_multi_mode|vendor/8267_ble_rc_demo|vendor/common/led_tx.c|vendor/8266_ota_boot|8266_ble_remote|vendor/826x_hci|vendor/8267_ble_master_kma_dongle|vendor/pktsniffer|vendor/common/km_ui.c|proj/drivers/somatic_sensor.c|vendor/8267_customer_remote|vendor/8263_ble_module|vendor/mouse|vendor/8266_antiloss|vendor/8267_btusb|vendor/audio_dongle|proj/unit_test|vendor/antiloss|proj/telink_rf/frame.c|vendor/8263_remote_philips/|proj/uip|vendor/826x_spi_module|vendor/8263_beacon|vendor/common/custom.c|vendor/flyco_8266_module|os/eventio|proj/contiki|vendor/826x_flyco_module|vendor/common/device_mouse.c|vendor/8267_ble_headphone|vendor/common/device_id.c|proj/telink_rf/tl_rf.c|vendor/8267_kt_remote|vendor/8266_ble_slave|vendor/826x_feature_test|drivers/spi_i.c|vendor/8263_tHID|os/ae.c|vendor/8266_ble_remote|vendor/ble_master_kma_dongle|vendor/8263_remote_pp|proj_lib/ble_ll|vendor/l2cap_test|vendor/dongle|vendor/826x_profile_test|freakz|vendor/8266_ble_selfie|vendor/8267_usb_host|proj/drivers/led.c|proj/telink_rf|vendor/ble_master|proj/ext_drv/mex.c|vendor/8267_audio_dongle|proj/drivers/ir.c|proj/os/sys.c|proj/ext_drv|vendor/8267_sniffer|vendor/8261_multi_mouse|proj/freakz|vendor/826x_ota_boot|vendor/8266_ble_master_kma_dongle|vendor/mesh_light|vendor/ble_slave|vendor/8263_antiloss|vendor/link_layer|proj/uip_xxx" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+			<storageModule moduleId="scannerConfiguration">
+				<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="makefileGenerator">
+						<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533.;com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.291894792;com.telink.tc32eclipse.compiler.TC32Win.input.935598055">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.936994533.">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.">
+					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="makefileGenerator">
+							<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+					<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+						<buildOutputProvider>
+							<openAction enabled="true" filePath=""/>
+							<parser enabled="true"/>
+						</buildOutputProvider>
+						<scannerInfoProvider id="specsFile">
+							<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+							<parser enabled="true"/>
+						</scannerInfoProvider>
+					</profile>
+				</scannerConfigBuildInfo>
+				<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927;com.telink.tc32eclipse.configuration.app.release.1121156933.1715305487.2075187956.1454992863.132969007.501524205.1380164055.987396901.2076157562.1809959923.346019507.306240912.530308564.1621834744.2015687532.962125608.1480601927.;com.telink.tc32eclipse.tool.compiler.TC32Win.app.release.603386033;com.telink.tc32eclipse.compiler.TC32Win.input.570990866">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
