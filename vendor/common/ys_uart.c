@@ -15,7 +15,7 @@
 #include "../../proj/drivers/uart.h"
 #include "ys_uart.h"
 
-#define UART_BUFF_SIZE      64
+#define UART_BUFF_SIZE      256
 
 __attribute__((aligned(4))) unsigned char uart_rx_buff[UART_BUFF_SIZE] = {0x00,0x00,0x00,0x00,}; // the first four byte is length to receive data.
 __attribute__((aligned(4))) unsigned char uart_tx_buff[UART_BUFF_SIZE] = {0x01,0x00,0x00,0x00,UART_MAGIC_BYTE}; // the first four byte is length to send data.

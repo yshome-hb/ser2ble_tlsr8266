@@ -70,8 +70,8 @@ typedef enum
 
 
 extern void ble_app_init();
-extern void ble_spp_send_data(u8 *data, u8 len);
-extern void ble_spp_recv_handler(u8 *data, u8 len);
+extern int ble_spp_send_data(u8 *data, u8 len);
+extern int ble_spp_recv_handler(u8 *data, u8 len);
 
 
 #endif /* _BLE_APP_H_ */

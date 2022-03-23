@@ -230,6 +230,7 @@ void ble_app_init ()
 	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 5;
 
 	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+6, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+6);
+	//blc_att_registerMtuSizeExchangeCb((att_mtuSizeExchange_callback_t *)&mtu_size_exchange_func);
 }
 
 _attribute_ram_code_ static int spp_onReceiveData(rf_packet_att_write_t *p)
@@ -238,13 +239,16 @@ _attribute_ram_code_ static int spp_onReceiveData(rf_packet_att_write_t *p)
 	return 0;
 }
 
-_attribute_ram_code_ void ble_spp_send_data(u8 *data, u8 len)
+_attribute_ram_code_ int ble_spp_send_data(u8 *data, u8 len)
 {
-   	if(blc_ll_getCurrentState() == BLS_LINK_STATE_CONN)
-		bls_att_pushNotifyData(SPP_Server2Client_INPUT_DP_H, data, len);
+   	if(blc_ll_getCurrentState() != BLS_LINK_STATE_CONN)
+		return 0;
+
+	return bls_att_pushNotifyData(SPP_Server2Client_INPUT_DP_H, data, len);
 }
 
-__attribute__ ((weak)) void ble_spp_recv_handler(u8 *data, u8 len)
+__attribute__ ((weak)) int ble_spp_recv_handler(u8 *data, u8 len)
 {
 	YS_LOG("spp recv data %d", len);
+	return 0;
 }
