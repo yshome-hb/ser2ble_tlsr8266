@@ -16,12 +16,22 @@
 
 #define UART_MAGIC_BYTE		0xA5
 
+typedef enum {
+	UART_BAUD_9600 = 0,
+	UART_BAUD_19200,
+	UART_BAUD_38400,
+	UART_BAUD_57600,
+	UART_BAUD_115200,
+	UART_BAUD_230400,
+}UART_BaudTypeDef;
+
 typedef struct{
 	unsigned int dma_len;       // dma len must be 4 byte
 	unsigned char data[1];
 }ysu_data_t;
 
-extern void ys_uart_init();
+extern void ys_uart_set_baud(UART_BaudTypeDef baud);
+extern void ys_uart_init(void);
 extern void ys_uart_process(void);
 extern int ys_uart_recv_handler(ysu_data_t *data);
 extern unsigned char *ys_uart_get_txaddr(void);

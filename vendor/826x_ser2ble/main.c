@@ -27,14 +27,8 @@
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
 #include "blt_led.h"
-#include "ble_app.h"
-#include "ys_uart.h"
+#include "ser2ble.h"
 
-#define UART_FIFO_SIZE	22
-#define UART_FIFO_NUM	16
-
-MYFIFO_INIT(uart_rxfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
-MYFIFO_INIT(uart_txfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
 
 _attribute_ram_code_ void irq_handler(void)
 {
@@ -57,9 +51,7 @@ int main (void)
 
 	rf_drv_init(CRYSTAL_TYPE);
 
-	ble_app_init();
-
-	ys_uart_init();
+	ser2ble_init();
 
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
@@ -77,15 +69,7 @@ int main (void)
 #endif
 		blt_sdk_main_loop();
 
-		ys_uart_process();
-
-		u8 *fp = my_fifo_get(&uart_rxfifo);
-		if(fp != NULL)
-		{
-			if(ble_nus_send_data(fp+2, fp[0]) == 0)
-				my_fifo_pop(&uart_rxfifo);
-			bls_pm_setManualLatency(0);
-		}
+		ser2ble_process();
 
 		device_led_process();
 
@@ -100,25 +84,3 @@ int main (void)
 	}
 }
 
-_attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
-{
-	u8 *recv_ptr = rx_data->data;
-	u8 recv_len = 0;
-
-	while(rx_data->dma_len){
-		recv_len = min(20, rx_data->dma_len);
-		my_fifo_push(&uart_rxfifo, recv_ptr, recv_len);
-		rx_data->dma_len -= recv_len;
-		recv_ptr += recv_len;
-	}
-	
-	return 0;
-}
-
-_attribute_ram_code_ int ble_nus_recv_handler(u8 *data, u8 len)
-{
-	u8 *uart_data = ys_uart_get_txaddr();
-	memcpy(uart_data, data, len);
-	ys_uart_send(len);
-	return 0;
-}

@@ -14,6 +14,7 @@
 #ifndef _BLE_APP_H_
 #define _BLE_APP_H_
 
+#include "../../proj/common/types.h"
 #include "ys_config.h"
 
 

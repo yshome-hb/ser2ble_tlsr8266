@@ -27,6 +27,32 @@ __attribute__ ((weak)) int ys_uart_recv_handler(ysu_data_t *data)
 	return 0;
 }
 
+void ys_uart_set_baud(UART_BaudTypeDef baud)
+{
+	switch(baud){
+		case UART_BAUD_9600:
+			CLK16M_UART9600;
+			break;
+		case UART_BAUD_19200:
+			CLK16M_UART19200;
+			break;
+		case UART_BAUD_38400:
+			CLK16M_UART38400;
+			break;
+		case UART_BAUD_57600:
+			CLK16M_UART57600;
+			break;
+		case UART_BAUD_115200:
+			CLK16M_UART115200;
+			break;
+		case UART_BAUD_230400:
+			CLK16M_UART230400;
+			break;	
+		default:
+			break;
+	}
+}
+
 void ys_uart_init(void)
 {
 	reg_dma_rx_rdy0 = FLD_DMA_UART_RX | FLD_DMA_UART_TX;
