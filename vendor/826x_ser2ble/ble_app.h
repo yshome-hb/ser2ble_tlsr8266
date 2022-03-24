@@ -42,19 +42,30 @@ typedef enum
 	DeviceInformation_pnpID_CD_H,			//UUID: 2803, 	VALUE:  			Prop: Read
 	DeviceInformation_pnpID_DP_H,			//UUID: 2A50,	VALUE: PnPtrs
 
-/********telink spp**************************************************************************************/
-	SPP_PS_H, 								//UUID: 2800, 	VALUE: telink audio service uuid
-
-	//Server2Client
-	SPP_Server2Client_INPUT_CD_H,			//UUID: 2803, 	VALUE:  			Prop: Read | Notify
-	SPP_Server2Client_INPUT_DP_H,			//UUID: TELIK_SPP_Server2Client uuid,  VALUE: SppDataServer2ClientData
-	SPP_Server2Client_INPUT_CCB_H,			//UUID: 2902 	VALUE: SppDataServer2ClientDataCCC
-	SPP_Server2Client_INPUT_DESC_H,			//UUID: 2901, 	VALUE: TelinkSPPS2CDescriptor
+/********nodric nus**************************************************************************************/
+	NUS_PS_H, 								//UUID: 2800, 	VALUE: nordic nus service uuid
 
 	//Client2Server
-	SPP_Client2Server_OUT_CD_H,				//UUID: 2803, 	VALUE:  			Prop: Read | write_without_rsp
-	SPP_Client2Server_OUT_DP_H,				//UUID: TELIK_SPP_Client2Server uuid,  VALUE: SppDataClient2ServerData
-	SPP_Client2Server_DESC_H,				//UUID: 2901, 	VALUE: TelinkSPPC2SDescriptor
+	NUS_Client2Server_OUT_CD_H,				//UUID: 2803, 	VALUE:  			Prop: Read | write_without_rsp
+	NUS_Client2Server_OUT_DP_H,				//UUID: NUS_Client2Server uuid,  VALUE: nusClient2ServerData
+	NUS_Client2Server_DESC_H,				//UUID: 2901, 	VALUE: nusC2SDescriptor
+
+	//Server2Client
+	NUS_Server2Client_INPUT_CD_H,			//UUID: 2803, 	VALUE:  			Prop: Read | Notify
+	NUS_Server2Client_INPUT_DP_H,			//UUID: NUS_Server2Client uuid,  VALUE: nusServer2ClientData
+	NUS_Server2Client_INPUT_CCB_H,			//UUID: 2902 	VALUE: nusServer2ClientDataCCC
+	NUS_Server2Client_INPUT_DESC_H,			//UUID: 2901, 	VALUE: nusS2CDescriptor
+
+	//Command
+	NUS_Command_CD_H,						//UUID: 2803, 	VALUE:  			Prop: Read | write_without_rsp
+	NUS_Command_DP_H,						//UUID: NUS_Command uuid,  VALUE: nusCommandData
+	NUS_Command_CCB_H,						//UUID: 2902 	VALUE: nusCommandDataCCC
+	NUS_Command_DESC_H,						//UUID: 2901, 	VALUE: nusCommandDescriptor
+
+	//GPIO_Output
+	NUS_GPIO_CD_H,							//UUID: 2803, 	VALUE:  			Prop: Read | write_without_rsp
+	NUS_GPIO_DP_H,							//UUID: NUS_GPIO uuid,  VALUE: nusIOData
+	NUS_GPIO_DESC_H,						//UUID: 2901, 	VALUE: nusGPIODescriptor
 
 #if (BLE_OTA_ENABLE)
 /**********OTA***********************************************************************************/
@@ -70,8 +81,10 @@ typedef enum
 
 
 extern void ble_app_init();
-extern int ble_spp_send_data(u8 *data, u8 len);
-extern int ble_spp_recv_handler(u8 *data, u8 len);
+extern int ble_nus_send_data(u8 *data, u8 len);
+extern int ble_nus_recv_handler(u8 *data, u8 len);
+extern int ble_nus_cmd_handler(u8 *data, u8 len);
+extern int ble_nus_gpio_handler(u8 *data, u8 len);
 
 
 #endif /* _BLE_APP_H_ */

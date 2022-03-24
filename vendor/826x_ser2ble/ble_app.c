@@ -91,30 +91,57 @@ static const u8	pnPtrs [] = {
 	U16_LO(ID_PRODUCT), U16_HI(ID_PRODUCT),
 	U16_LO(ID_VERSION), U16_HI(ID_VERSION)};
 
-//spp Service ......................................................................
+//nus Service ......................................................................
 
-static u8 TelinkSppServiceUUID[16]	      	 = TELINK_SPP_UUID_SERVICE;
-static u8 TelinkSppDataServer2ClientUUID[16] = TELINK_SPP_DATA_SERVER2CLIENT;
-static u8 TelinkSppDataClient2ServerUUID[16] = TELINK_SPP_DATA_CLIENT2SERVER;
-// SPP attribute values
-static const u8 sppS2CChar[19] = {
-	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
-	U16_LO(SPP_Server2Client_INPUT_DP_H), U16_HI(SPP_Server2Client_INPUT_DP_H),
-	TELINK_SPP_DATA_SERVER2CLIENT,
-};
-static const u8 sppC2SChar[19] = {
+#define NUS_UUID_SERVICE   			{0x9E,0xCA,0xDC,0x24,0x0E,0xE5,0xA9,0xE0,0x93,0xF3,0xA3,0xB5,0x01,0x00,0x40,0x6E}	//!< nordic_nus service
+#define NUS_DATA_CLIENT2SERVER   	{0x9E,0xCA,0xDC,0x24,0x0E,0xE5,0xA9,0xE0,0x93,0xF3,0xA3,0xB5,0x02,0x00,0x40,0x6E}	//!< nordic_nus client2server char
+#define NUS_DATA_SERVER2CLIENT   	{0x9E,0xCA,0xDC,0x24,0x0E,0xE5,0xA9,0xE0,0x93,0xF3,0xA3,0xB5,0x03,0x00,0x40,0x6E}	//!< nordic_nus service2client char
+#define NUS_DATA_COMMAND   			{0x9E,0xCA,0xDC,0x24,0x0E,0xE5,0xA9,0xE0,0x93,0xF3,0xA3,0xB5,0x04,0x00,0x40,0x6E}	//!< nordic_nus command char
+#define NUS_DATA_GPIO   			{0x9E,0xCA,0xDC,0x24,0x0E,0xE5,0xA9,0xE0,0x93,0xF3,0xA3,0xB5,0x05,0x00,0x40,0x6E}	//!< nordic_nus gpio char
+
+static const u8 nusServiceUUID[16]	      = NUS_UUID_SERVICE;
+static const u8 nusDataClient2ServerUUID[16] = NUS_DATA_CLIENT2SERVER;
+static const u8 nusDataServer2ClientUUID[16] = NUS_DATA_SERVER2CLIENT;
+static const u8 nusDataCommandUUID[16] = NUS_DATA_COMMAND;
+static const u8 nusDataGPIOUUID[16] = NUS_DATA_GPIO;
+
+// NUS attribute values
+static const u8 nusC2SChar[19] = {
 	CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
-	U16_LO(SPP_Client2Server_OUT_DP_H), U16_HI(SPP_Client2Server_OUT_DP_H),
-	TELINK_SPP_DATA_CLIENT2SERVER,
+	U16_LO(NUS_Client2Server_OUT_DP_H), U16_HI(NUS_Client2Server_OUT_DP_H),
+	NUS_DATA_CLIENT2SERVER,
 };
-static u8 SppDataServer2ClientData[ATT_MTU_SIZE - 3];
-static u8 SppDataServer2ClientDataCCC[2] = {0};
-static u8  SppDataClient2ServerData[ATT_MTU_SIZE - 3];
-//SPP data descriptor
-const u8 TelinkSPPS2CDescriptor[] = "Telink SPP: Module->Phone";
-const u8 TelinkSPPC2SDescriptor[] = "Telink SPP: Phone->Module";
+static const u8 nusS2CChar[19] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(NUS_Server2Client_INPUT_DP_H), U16_HI(NUS_Server2Client_INPUT_DP_H),
+	NUS_DATA_SERVER2CLIENT,
+};
+static const u8 nusCmdChar[19] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(NUS_Command_DP_H), U16_HI(NUS_Command_DP_H),
+	NUS_DATA_COMMAND,
+};
+static const u8 nusGPIOChar[19] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(NUS_GPIO_DP_H), U16_HI(NUS_GPIO_DP_H),
+	NUS_DATA_GPIO,
+};
 
-_attribute_ram_code_ static int spp_onReceiveData(rf_packet_att_write_t *p);
+static u8 nusClient2ServerData[ATT_MTU_SIZE - 3];
+static u8 nusServer2ClientData[ATT_MTU_SIZE - 3];
+static u8 nusServer2ClientDataCCC[2] = {0};
+static u8 nusCommandData[ATT_MTU_SIZE - 3];
+static u8 nusCommandDataCCC[2] = {0};
+static u8 nusIOData;
+//NUS data descriptor
+const u8 nusC2SDescriptor[] = "NUS: Phone->Module";
+const u8 nusS2CDescriptor[] = "NUS: Module->Phone";
+const u8 nusCommandDescriptor[] = "NUS: Command";
+const u8 nusGPIODescriptor[] = "NUS: GPIO";
+
+_attribute_ram_code_ static int nus_onReceiveData(rf_packet_att_write_t *p);
+_attribute_ram_code_ static int nus_onCommandData(rf_packet_att_write_t *p);
+_attribute_ram_code_ static int nus_onGpioData(rf_packet_att_write_t *p);
 
 #if (BLE_OTA_ENABLE)
 //ota Service ......................................................................
@@ -135,7 +162,7 @@ static const u8 otaName[] = {'O', 'T', 'A'};
 #endif
 
 // TM : to modify
-static const attribute_t blespp_attributes[] = {
+static const attribute_t blenus_attributes[] = {
 
 	{ATT_END_H - 1, 0,0,0,0,0},	// total num of attribute
 
@@ -162,19 +189,30 @@ static const attribute_t blespp_attributes[] = {
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(pnPtrsChar), (u8*)(&characterUUID), (u8*)(pnPtrsChar), 0},
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(pnPtrs),(u8*)(pnPtrsChar+3), (u8*)(pnPtrs), 0},
 
-////////////////////////////////////// SPP Service /////////////////////////////////////////////////////
-	{SPP_Client2Server_DESC_H - SPP_PS_H + 1, ATT_PERMISSIONS_READ, 2, 16, (u8*)(&primaryServiceUUID), (u8*)(&TelinkSppServiceUUID), 0},
-
-	// Server2Client
-	{0, ATT_PERMISSIONS_READ, 2, sizeof(sppS2CChar), (u8*)(&characterUUID), (u8*)(sppS2CChar), 0},	//prop
-	{0, ATT_PERMISSIONS_READ,16, sizeof(SppDataServer2ClientData), (u8*)(&TelinkSppDataServer2ClientUUID), (u8*)(SppDataServer2ClientData), 0},	//value
-	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(SppDataServer2ClientDataCCC), (u8*)(&clientCharacterCfgUUID), 	(u8*)(SppDataServer2ClientDataCCC), 0},	//value
-	{0, ATT_PERMISSIONS_READ, 2, sizeof(TelinkSPPS2CDescriptor), (u8*)(&userDescUUID),(u8*)(&TelinkSPPS2CDescriptor)},
+////////////////////////////////////// NUS Service /////////////////////////////////////////////////////
+	{NUS_GPIO_DESC_H - NUS_PS_H + 1, ATT_PERMISSIONS_READ, 2, 16, (u8*)(&primaryServiceUUID), (u8*)(&nusServiceUUID), 0},
 
 	// Client2Server
-	{0, ATT_PERMISSIONS_READ, 2, sizeof(sppC2SChar), (u8*)(&characterUUID), (u8*)(sppC2SChar), 0},	//prop
-	{0, ATT_PERMISSIONS_RDWR,16, sizeof(SppDataClient2ServerData), (u8*)(&TelinkSppDataClient2ServerUUID), (u8*)(SppDataClient2ServerData), &spp_onReceiveData},	//value
-	{0, ATT_PERMISSIONS_READ, 2, sizeof(TelinkSPPC2SDescriptor), (u8*)(&userDescUUID),(u8*)(&TelinkSPPC2SDescriptor)},
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusC2SChar), (u8*)(&characterUUID), (u8*)(nusC2SChar), 0},	//prop
+	{0, ATT_PERMISSIONS_RDWR,16, sizeof(nusClient2ServerData), (u8*)(&nusDataClient2ServerUUID), (u8*)(nusClient2ServerData), &nus_onReceiveData},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusC2SDescriptor), (u8*)(&userDescUUID),(u8*)(&nusC2SDescriptor)},
+
+	// Server2Client
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusS2CChar), (u8*)(&characterUUID), (u8*)(nusS2CChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ,16, sizeof(nusServer2ClientData), (u8*)(&nusDataServer2ClientUUID), (u8*)(nusServer2ClientData), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(nusServer2ClientDataCCC), (u8*)(&clientCharacterCfgUUID), 	(u8*)(nusServer2ClientDataCCC), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusS2CDescriptor), (u8*)(&userDescUUID),(u8*)(&nusS2CDescriptor)},
+
+	// Command
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusCmdChar), (u8*)(&characterUUID), (u8*)(nusCmdChar), 0},	//prop
+	{0, ATT_PERMISSIONS_RDWR,16, sizeof(nusCommandData), (u8*)(&nusDataCommandUUID), (u8*)(nusCommandData), &nus_onCommandData},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(nusCommandDataCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(nusCommandDataCCC), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusCommandDescriptor), (u8*)(&userDescUUID),(u8*)(&nusCommandDescriptor)},
+
+	// GPIO
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusGPIOChar), (u8*)(&characterUUID), (u8*)(nusGPIOChar), 0},	//prop
+	{0, ATT_PERMISSIONS_RDWR,16, sizeof(nusIOData), (u8*)(&nusDataGPIOUUID), (u8*)(&nusIOData), &nus_onGpioData},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(nusGPIODescriptor), (u8*)(&userDescUUID),(u8*)(&nusGPIODescriptor)},
 
 #if (BLE_OTA_ENABLE)
 	////////////////////////////////////// OTA ////////////////////////////////////////////////////////////////
@@ -206,7 +244,7 @@ void ble_app_init ()
 #define ADV_DEVICE_NAME_MAX_LEN  	18
 	u8 adv_data_raw[31] = {
 		0x02, 0x01, 0x05, 		// BLE limited discoverable mode and BR/EDR not supported
-		0x03, 0x03, 0x10, 0x19,	// incomplete list of service class UUIDs (0x1910)
+		0x03, 0x03, 0x01, 0x00,	// incomplete list of service class UUIDs (0x0001)
 		19, 0x09, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, };
 
 	u8  tbl_mac[] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
@@ -222,7 +260,7 @@ void ble_app_init ()
 	}
 
 	ble_drv_init(tbl_mac);
-	bls_att_setAttributeTable((u8 *)blespp_attributes);
+	bls_att_setAttributeTable((u8 *)blenus_attributes);
 
 	u8 name_len = strlen(devName);
 	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, devName, name_len);
@@ -233,22 +271,46 @@ void ble_app_init ()
 	//blc_att_registerMtuSizeExchangeCb((att_mtuSizeExchange_callback_t *)&mtu_size_exchange_func);
 }
 
-_attribute_ram_code_ static int spp_onReceiveData(rf_packet_att_write_t *p)
+_attribute_ram_code_ static int nus_onReceiveData(rf_packet_att_write_t *p)
 {
-	ble_spp_recv_handler(&p->value, p->l2capLen - 3);
+	ble_nus_recv_handler(&p->value, p->l2capLen - 3);
 	return 0;
 }
 
-_attribute_ram_code_ int ble_spp_send_data(u8 *data, u8 len)
+_attribute_ram_code_ static int nus_onCommandData(rf_packet_att_write_t *p)
+{
+	ble_nus_cmd_handler(&p->value, p->l2capLen - 3);
+	return 0;
+}
+
+_attribute_ram_code_ static int nus_onGpioData(rf_packet_att_write_t *p)
+{
+	ble_nus_gpio_handler(&p->value, p->l2capLen - 3);
+	return 0;
+}
+
+_attribute_ram_code_ int ble_nus_send_data(u8 *data, u8 len)
 {
    	if(blc_ll_getCurrentState() != BLS_LINK_STATE_CONN)
 		return 0;
 
-	return bls_att_pushNotifyData(SPP_Server2Client_INPUT_DP_H, data, len);
+	return bls_att_pushNotifyData(NUS_Server2Client_INPUT_DP_H, data, len);
 }
 
-__attribute__ ((weak)) int ble_spp_recv_handler(u8 *data, u8 len)
+__attribute__ ((weak)) int ble_nus_recv_handler(u8 *data, u8 len)
 {
-	YS_LOG("spp recv data %d", len);
+	YS_LOG("nus recv data %d", len);
+	return 0;
+}
+
+__attribute__ ((weak)) int ble_nus_cmd_handler(u8 *data, u8 len)
+{
+	YS_LOG("nus cmd data %d", len);
+	return 0;
+}
+
+__attribute__ ((weak)) int ble_nus_gpio_handler(u8 *data, u8 len)
+{
+	YS_LOG("nus gpio data %d", len);
 	return 0;
 }

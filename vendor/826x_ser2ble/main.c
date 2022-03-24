@@ -26,6 +26,7 @@
 #include "../../proj_lib/rf_drv.h"
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
+#include "blt_led.h"
 #include "ble_app.h"
 #include "ys_uart.h"
 
@@ -81,7 +82,7 @@ int main (void)
 		u8 *fp = my_fifo_get(&uart_rxfifo);
 		if(fp != NULL)
 		{
-			if(ble_spp_send_data(fp+2, fp[0]) == 0)
+			if(ble_nus_send_data(fp+2, fp[0]) == 0)
 				my_fifo_pop(&uart_rxfifo);
 			bls_pm_setManualLatency(0);
 		}
@@ -114,7 +115,7 @@ _attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
 	return 0;
 }
 
-_attribute_ram_code_ int ble_spp_recv_handler(u8 *data, u8 len)
+_attribute_ram_code_ int ble_nus_recv_handler(u8 *data, u8 len)
 {
 	u8 *uart_data = ys_uart_get_txaddr();
 	memcpy(uart_data, data, len);
