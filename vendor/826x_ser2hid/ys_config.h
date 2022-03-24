@@ -46,6 +46,9 @@ extern "C" {
 /////////////////// rf tx power //////////////////////////////
 #define DEFAULT_NORMAL_TX_POWER   	RF_POWER_8dBm
 
+/////////////////// cfg address in flash //////////////////////////////
+#define CFG_ADDR_DEVICE   		    0x7A000
+
 /////////////////// product information //////////////////////////////
 #define ID_VENDOR				    0x248A
 #define ID_PRODUCT				    0x8266

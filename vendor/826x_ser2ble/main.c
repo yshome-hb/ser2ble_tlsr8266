@@ -27,6 +27,7 @@
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
 #include "blt_led.h"
+#include "ys_rom.h"
 #include "ser2ble.h"
 
 
@@ -48,6 +49,7 @@ int main (void)
 
 	///NOTE:This function must be placed before the following function rf_drv_init().
 	blc_app_loadCustomizedParameters();  //load customized freq_offset cap value and tp value
+	ys_rom_load_device_config(&device_config);
 
 	rf_drv_init(CRYSTAL_TYPE);
 

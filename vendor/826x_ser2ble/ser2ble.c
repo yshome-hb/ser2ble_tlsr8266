@@ -12,6 +12,7 @@
  *******************************************************************************************************/
 #include "../../proj/tl_common.h"
 #include "ys_uart.h"
+#include "ys_rom.h"
 #include "ble_app.h"
 #include "ser2ble.h"
 
@@ -26,7 +27,7 @@ MYFIFO_INIT(uart_txfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
 void ser2ble_init(void)
 {
 	ble_app_init();
-	ys_uart_init();
+	ys_uart_init(device_config.baudrate);
 }
 
 _attribute_ram_code_ void ser2ble_process(void)
@@ -68,7 +69,11 @@ _attribute_ram_code_ int ble_nus_recv_handler(u8 *data, u8 len)
 int ble_nus_cmd_handler(u8 *data, u8 len)
 {
 	if((len == 2) && (data[0] == 0x0B)){
-		ys_uart_set_baud(data[1]);
+		if(data[1] <= UART_BAUD_230400){
+			ys_uart_set_baud(data[1]);
+			device_config.baudrate = data[1];
+			ys_rom_save_device_config(&device_config);
+		}
 	}
 
 	return 0;

@@ -75,13 +75,26 @@ static void ble_ota_end_cb(int result)
 
 }
 
-void ble_drv_init(u8 *addr)
+void ble_drv_init(void)
 {
+////////////////// Initialize MAC /////////////////////////////
+	u8  tbl_mac [] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
+	u32 *pmac = (volatile u32 *) CFG_ADR_MAC;
+	if (*pmac == U32_MAX)
+	{
+		generateRandomNum(sizeof(tbl_mac), tbl_mac);
+		flash_write_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
+	}
+	else
+	{
+		flash_read_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
+	}
+
 ////////////////// BLE stack initialization ////////////////////////////////////
 
 	////// Controller Initialization  //////////
-	blc_ll_initBasicMCU(addr);   			//mandatory
-	blc_ll_initAdvertising_module(addr); 	//adv module: 		 mandatory for BLE slave,
+	blc_ll_initBasicMCU(tbl_mac);   			//mandatory
+	blc_ll_initAdvertising_module(tbl_mac); 	//adv module: 		 mandatory for BLE slave,
 	blc_ll_initSlaveRole_module();			//slave module: 	 mandatory for BLE slave,
 
 	////// Host Initialization  //////////

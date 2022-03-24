@@ -32,7 +32,7 @@ typedef struct
 
 } gap_periConnectParams_t;
 
-extern void ble_drv_init(u8 *addr);
+extern void ble_drv_init(void);
 extern void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len);
 
 

@@ -53,10 +53,10 @@ void ys_uart_set_baud(UART_BaudTypeDef baud)
 	}
 }
 
-void ys_uart_init(void)
+void ys_uart_init(UART_BaudTypeDef baud)
 {
 	reg_dma_rx_rdy0 = FLD_DMA_UART_RX | FLD_DMA_UART_TX;
-	CLK16M_UART115200;
+	ys_uart_set_baud(baud);
 
 	uart_RecBuffInit(uart_rx_buff, sizeof(uart_rx_buff));  //set uart rev buffer and buffer size
 	uart_txBuffInit(UART_BUFF_SIZE);

@@ -31,7 +31,7 @@ typedef struct{
 }ysu_data_t;
 
 extern void ys_uart_set_baud(UART_BaudTypeDef baud);
-extern void ys_uart_init(void);
+extern void ys_uart_init(UART_BaudTypeDef baud);
 extern void ys_uart_process(void);
 extern int ys_uart_recv_handler(ysu_data_t *data);
 extern unsigned char *ys_uart_get_txaddr(void);

@@ -247,24 +247,13 @@ void ble_app_init ()
 		0x03, 0x03, 0x01, 0x00,	// incomplete list of service class UUIDs (0x0001)
 		19, 0x09, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, };
 
-	u8  tbl_mac[] = {0xe1, 0xe1, 0xe2, 0xe3, 0xe4, 0xc7};
-	u32 *pmac = (volatile u32 *) CFG_ADR_MAC;
-	if (*pmac == U32_MAX)
-	{
-		generateRandomNum(sizeof(tbl_mac), tbl_mac);
-		flash_write_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
-	}
-	else
-	{
-		flash_read_page(CFG_ADR_MAC, sizeof(tbl_mac), tbl_mac);
-	}
-
-	ble_drv_init(tbl_mac);
+	ble_drv_init();
 	bls_att_setAttributeTable((u8 *)blenus_attributes);
 
+	u16 mac16 = *(volatile u16 *)CFG_ADR_MAC;
 	u8 name_len = strlen(devName);
 	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, devName, name_len);
-	ascii_to_hex(adv_data_raw + ADV_DEVICE_NAME_POS + name_len + 2, tbl_mac, 2);
+	ascii_to_hex(adv_data_raw + ADV_DEVICE_NAME_POS + name_len + 2, (u8 *)&mac16, 2);
 	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 5;
 
 	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+6, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+6);
