@@ -78,3 +78,9 @@ int ble_nus_cmd_handler(u8 *data, u8 len)
 
 	return 0;
 }
+
+int ble_nus_gpio_handler(u8 data)
+{
+
+	return 0;
+}

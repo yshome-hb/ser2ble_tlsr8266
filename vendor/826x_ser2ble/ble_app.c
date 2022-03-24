@@ -274,7 +274,7 @@ _attribute_ram_code_ static int nus_onCommandData(rf_packet_att_write_t *p)
 
 _attribute_ram_code_ static int nus_onGpioData(rf_packet_att_write_t *p)
 {
-	ble_nus_gpio_handler(&p->value, p->l2capLen - 3);
+	ble_nus_gpio_handler(p->value);
 	return 0;
 }
 
@@ -298,8 +298,8 @@ __attribute__ ((weak)) int ble_nus_cmd_handler(u8 *data, u8 len)
 	return 0;
 }
 
-__attribute__ ((weak)) int ble_nus_gpio_handler(u8 *data, u8 len)
+__attribute__ ((weak)) int ble_nus_gpio_handler(u8 data)
 {
-	YS_LOG("nus gpio data %d", len);
+	YS_LOG("nus gpio data 0x%x", data);
 	return 0;
 }

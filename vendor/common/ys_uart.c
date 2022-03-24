@@ -68,6 +68,8 @@ void ys_uart_init(UART_BaudTypeDef baud)
 
 _attribute_ram_code_ void ys_uart_process(void)
 {
+	uart_ErrorCLR();
+
 	unsigned char irq_src = reg_dma_rx_rdy0; // get the irq source and clear the irq.	
 	if(irq_src & FLD_DMA_UART_RX){
 		reg_dma_rx_rdy0 = FLD_DMA_UART_RX;

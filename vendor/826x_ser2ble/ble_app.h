@@ -85,7 +85,7 @@ extern void ble_app_init();
 extern int ble_nus_send_data(u8 *data, u8 len);
 extern int ble_nus_recv_handler(u8 *data, u8 len);
 extern int ble_nus_cmd_handler(u8 *data, u8 len);
-extern int ble_nus_gpio_handler(u8 *data, u8 len);
+extern int ble_nus_gpio_handler(u8 data);
 
 
 #endif /* _BLE_APP_H_ */
