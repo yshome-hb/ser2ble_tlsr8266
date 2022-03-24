@@ -19,6 +19,7 @@
 
 extern void ser2ble_init(void);
 extern void ser2ble_process(void);
+extern int ser2ble_cfg_key_handler(u8 val);
 
 
 #endif /* _SER_TO_BLE_H_ */

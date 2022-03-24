@@ -34,6 +34,8 @@ typedef struct
 
 extern void ble_drv_init(void);
 extern void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len);
+extern void ble_disconnect(void);
+extern bool ble_gap_connected(void);
 
 
 #endif /* _BLE_DRV_H_ */

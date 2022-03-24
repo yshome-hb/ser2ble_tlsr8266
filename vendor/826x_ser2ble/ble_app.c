@@ -13,6 +13,7 @@
 
 #include "../../proj_lib/ble/ll/ll.h"
 #include "../../proj_lib/ble/service/ble_ll_ota.h"
+#include "ys_rom.h"
 #include "ble_drv.h"
 #include "ble_app.h"
 
@@ -225,19 +226,6 @@ static const attribute_t blenus_attributes[] = {
 
 };
 
-static void ascii_to_hex(u8 *rp, u8 *sp, u8 len)
-{
-    static const u8 hex[16] = { 
-		'0', '1', '2', '3', '4', '5', '6', '7', 
-		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-    u8 n = 0;
-    for(u8 i = 0; i < len; i++)
-    {
-        rp[n++] = hex[sp[i] >> 4];
-        rp[n++] = hex[sp[i] & 0x0F];
-    }
-}
-
 void ble_app_init ()
 {
 #define ADV_DEVICE_NAME_POS   		7
@@ -250,13 +238,11 @@ void ble_app_init ()
 	ble_drv_init();
 	bls_att_setAttributeTable((u8 *)blenus_attributes);
 
-	u16 mac16 = *(volatile u16 *)CFG_ADR_MAC;
-	u8 name_len = strlen(devName);
-	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, devName, name_len);
-	ascii_to_hex(adv_data_raw + ADV_DEVICE_NAME_POS + name_len + 2, (u8 *)&mac16, 2);
-	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 5;
+	u8 name_len = strlen(device_config.dev_name);
+	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, device_config.dev_name, name_len);
+	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 1;
 
-	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+6, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+6);
+	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+2, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+2);
 	//blc_att_registerMtuSizeExchangeCb((att_mtuSizeExchange_callback_t *)&mtu_size_exchange_func);
 }
 

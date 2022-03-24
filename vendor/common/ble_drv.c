@@ -15,6 +15,7 @@
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
 #include "../../proj_lib/ble/ble_smp.h"
+#include "../../proj_lib/ble/service/ble_ll_ota.h"
 #include "blt_led.h"
 #include "ble_drv.h"
 
@@ -168,3 +169,15 @@ void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len)
 	device_led_setup(led_cfg[LED_SHINE_SLOW]);
 }
 
+void ble_disconnect()
+{
+	if(blc_ll_getCurrentState() != BLS_LINK_STATE_CONN)
+		return;
+
+	bls_ll_terminateConnection(HCI_ERR_REMOTE_USER_TERM_CONN);
+}
+
+bool ble_gap_connected()
+{
+	return (blc_ll_getCurrentState() == BLS_LINK_STATE_CONN);
+}

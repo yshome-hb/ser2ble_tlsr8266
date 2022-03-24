@@ -13,6 +13,7 @@
 #include "../../proj/tl_common.h"
 #include "ys_uart.h"
 #include "ys_rom.h"
+#include "ble_drv.h"
 #include "ble_app.h"
 #include "ser2ble.h"
 
@@ -35,11 +36,14 @@ _attribute_ram_code_ void ser2ble_process(void)
 	ys_uart_process();
 
 	u8 *fp = my_fifo_get(&uart_rxfifo);
-	if(fp != NULL)
-	{
-		if(ble_nus_send_data(fp+2, fp[0]) == 0)
-			my_fifo_pop(&uart_rxfifo);
-		bls_pm_setManualLatency(0);
+	if(fp != NULL){
+		if(ble_gap_connected()){
+			if(ble_nus_send_data(fp+2, fp[0]) == 0)
+				my_fifo_pop(&uart_rxfifo);
+			bls_pm_setManualLatency(0);
+		}else{
+
+		}
 	}
 }
 
@@ -82,5 +86,11 @@ int ble_nus_cmd_handler(u8 *data, u8 len)
 int ble_nus_gpio_handler(u8 data)
 {
 
+	return 0;
+}
+
+int ser2ble_cfg_key_handler(u8 val)
+{
+	YS_LOG("key val %d", val);
 	return 0;
 }

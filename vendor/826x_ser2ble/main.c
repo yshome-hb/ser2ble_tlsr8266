@@ -28,6 +28,7 @@
 #include "../../proj_lib/ble/ll/ll.h"
 #include "blt_led.h"
 #include "ys_rom.h"
+#include "ys_switch.h"
 #include "ser2ble.h"
 
 
@@ -55,6 +56,8 @@ int main (void)
 
 	ser2ble_init();
 
+	ys_switch_init();
+
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
     wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT, CLOCK_SYS_CLOCK_1MS);
@@ -62,6 +65,8 @@ int main (void)
 #endif
 
     irq_enable();
+
+	ys_switch_register(SW_CFG, GPIO_PF0, ser2ble_cfg_key_handler);
 
 	YS_LOG("main start");
 
@@ -74,6 +79,8 @@ int main (void)
 		ser2ble_process();
 
 		device_led_process();
+
+		ys_switch_scan();
 
     #if 0 //PRINT_DEBUG_INFO
 		static u32 tick = 0;
