@@ -15,8 +15,22 @@
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
 #include "../../proj_lib/ble/ble_smp.h"
+#include "blt_led.h"
 #include "ble_drv.h"
 
+enum{
+	LED_ON,	//1
+	LED_OFF,	//2
+	LED_SHINE_SLOW, //3
+	LED_SHINE_FAST, //4
+};
+
+const led_cfg_t led_cfg[] = {
+	    {100,	  0 ,	  0xff,	  0x00,  },    //long on
+	    {0,	      100 ,   0xff,	  0x00,  },    //long off
+	    {500,	  500 ,   0x01,	  0x02,	 },    //1Hz blink
+	    {250,	  250 ,   0x01,	  0x04,  },    //2Hz blink
+};
 
 static void ble_adv_duration_timeout_cb(u8 e, u8 *p, int n)
 {
@@ -35,11 +49,13 @@ static void ble_connect_cb(u8 e, u8 *p, int n)
 	bls_l2cap_setMinimalUpdateReqSendingTime_after_connCreate(1000);
 
 	YS_LOG("ble_connect_cb");
+	device_led_setup(led_cfg[LED_ON]);
 }
 
 static void ble_terminate_cb(u8 e, u8 *p, int n) //*p is terminate reason
 {
 	YS_LOG("ble_terminate_cb %d", *p);
+	device_led_setup(led_cfg[LED_SHINE_SLOW]);
 }
 
 _attribute_ram_code_ static void ble_remote_set_sleep_wakeup (u8 e, u8 *p, int n)
@@ -104,6 +120,7 @@ void ble_drv_init(u8 *addr)
 	bls_ota_registerResultIndicateCb(ble_ota_end_cb);
 #endif
 
+	device_led_init(BLE_LED, 1);
 }
 
 void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len)
@@ -134,5 +151,7 @@ void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len)
 	bls_ll_setAdvData(adv_data, adv_len);
 	bls_ll_setScanRspData(rsp_data, rsp_len);
 	bls_ll_setAdvEnable(1);  //adv enable
+
+	device_led_setup(led_cfg[LED_SHINE_SLOW]);
 }
 

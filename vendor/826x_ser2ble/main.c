@@ -60,8 +60,6 @@ int main (void)
 
 	ys_uart_init();
 
-	device_led_init(GPIO_PD5, 1);
-
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
     wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT, CLOCK_SYS_CLOCK_1MS);
@@ -87,6 +85,8 @@ int main (void)
 				my_fifo_pop(&uart_rxfifo);
 			bls_pm_setManualLatency(0);
 		}
+
+		device_led_process();
 
     #if 0 //PRINT_DEBUG_INFO
 		static u32 tick = 0;

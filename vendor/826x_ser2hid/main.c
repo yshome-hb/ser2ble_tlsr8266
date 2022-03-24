@@ -26,6 +26,7 @@
 #include "../../proj_lib/rf_drv.h"
 #include "../../proj_lib/pm.h"
 #include "../../proj_lib/ble/ll/ll.h"
+#include "blt_led.h"
 #include "ble_app.h"
 #include "ys_uart.h"
 
@@ -55,8 +56,6 @@ int main (void)
 
 	ys_uart_init();
 
-	device_led_init(GPIO_PD5, 1);
-
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
     wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT, CLOCK_SYS_CLOCK_1MS);
@@ -74,6 +73,8 @@ int main (void)
 		blt_sdk_main_loop();
 
 		ys_uart_process();
+		
+		device_led_process();
 
     #if 0 //PRINT_DEBUG_INFO
 		static u32 tick = 0;
