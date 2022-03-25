@@ -50,8 +50,8 @@ void ys_switch_scan(void)
 		sw_tbl[i].pre_value = sw_tbl[i].value;
 		sw_tbl[i].filter <<= 1;
 		sw_tbl[i].filter |= (gpio_read(sw_tbl[i].pin) > 0);
-		sw_tbl[i].filter &= 0x0F;
-		if(sw_tbl[i].filter == 0x0F)
+		sw_tbl[i].filter &= 0xFF;
+		if(sw_tbl[i].filter == 0xFF)
 			sw_tbl[i].value = 0x01;
 		else if(sw_tbl[i].filter == 0x00)
 			sw_tbl[i].value = 0x00;

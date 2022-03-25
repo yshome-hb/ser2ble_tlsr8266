@@ -66,7 +66,7 @@ int main (void)
 
     irq_enable();
 
-	ys_switch_register(SW_CFG, GPIO_PF0, ser2ble_cfg_key_handler);
+	ys_switch_register(SW_CFG, GPIO_PF1, ser2ble_cfg_key_handler);
 
 	YS_LOG("main start");
 

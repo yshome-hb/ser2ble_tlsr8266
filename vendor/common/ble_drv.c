@@ -35,7 +35,7 @@ const led_cfg_t led_cfg[] = {
 
 static void ble_adv_duration_timeout_cb(u8 e, u8 *p, int n)
 {
-	bls_ll_setAdvParam(ADV_INTERVAL_100MS, ADV_INTERVAL_300MS,
+	bls_ll_setAdvParam(ADV_INTERVAL_50MS, ADV_INTERVAL_200MS,
 					ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
 					BLE_ADDR_PUBLIC, NULL,
 					BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
@@ -156,7 +156,7 @@ void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len)
 	else
 #endif
 	{
-		bls_ll_setAdvParam(ADV_INTERVAL_100MS, ADV_INTERVAL_300MS,
+		bls_ll_setAdvParam(ADV_INTERVAL_50MS, ADV_INTERVAL_200MS,
 					   	ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC,
 					   	BLE_ADDR_PUBLIC, NULL,
 					   	BLT_ENABLE_ADV_ALL, ADV_FP_NONE);

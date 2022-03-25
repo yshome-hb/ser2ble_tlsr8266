@@ -43,7 +43,7 @@ void ys_rom_load_device_config(device_cfg_t *cfg)
 		memset(cfg->dev_name, 0, sizeof(cfg->dev_name));
 
 		u16 mac16 = *(volatile u16 *)CFG_ADR_MAC;
-        strncpy((char *)cfg->dev_name, STRINGIFY(PRODUCT_NAME), sizeof(cfg->dev_name)-4);
+        strncpy((char *)cfg->dev_name, STRINGIFY(PRODUCT_NAME), strlen(STRINGIFY(PRODUCT_NAME)));
         ascii_to_hex(cfg->dev_name + strlen(STRINGIFY(PRODUCT_NAME)), (u8 *)&mac16, 2);
 		cfg->dev_name[19] = 0;		
 	}

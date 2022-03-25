@@ -49,8 +49,9 @@ _attribute_ram_code_ void ser2ble_process(void)
 			if(ble_nus_send_data(fp+2, fp[0]) == 0)
 				my_fifo_pop(&uart_rxfifo);
 			bls_pm_setManualLatency(0);
-		}else if(fp[0] >= 4 && fp[2] == 'A' && fp[3] == 'T'){
-			ser2ble_at_process(fp+4, fp[0]-2);
+		}else{
+			ser2ble_at_process(fp+2, fp[0]);
+			my_fifo_pop(&uart_rxfifo);
 		}
 	}
 
@@ -104,7 +105,6 @@ int ble_nus_gpio_handler(u8 data)
 
 int ser2ble_cfg_key_handler(u8 val)
 {
-	YS_LOG("key val %d", val);
 	if(val == 0){
 		key_tick = (clock_time() | 1);
 	}else if(key_tick){
@@ -114,7 +114,6 @@ int ser2ble_cfg_key_handler(u8 val)
 			device_config.baudrate = UART_BAUD_9600;
 		ys_uart_set_baud(device_config.baudrate);
 		ys_rom_save_device_config(&device_config);
-		YS_LOG("short pressed");
 	}
 
 	return 0;
@@ -124,7 +123,16 @@ int ser2ble_at_process(u8 *cmd, u8 len)
 {
 	int sertx_idx = 0;
 
-	if(memcmp(cmd, "\r\n", 2) == 0){
+	if(len < 4)
+		return 0;
+
+	if((cmd[0] != 'A') || (cmd[1] != 'T') 
+	 ||(cmd[len-2] != '\r') || (cmd[len-1] != '\n'))
+		return 0;
+
+	len -= 4;
+
+	if(len == 0){
 		sertx_ptr[sertx_idx++] = 'O';
 		sertx_ptr[sertx_idx++] = 'K';
 	}
