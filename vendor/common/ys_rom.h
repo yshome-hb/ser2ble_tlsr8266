@@ -27,6 +27,19 @@ typedef struct
 
 extern device_cfg_t device_config;
 
+static inline void ascii_to_hex(u8 *rp, u8 *sp, u8 len)
+{
+    static const u8 hex[16] = { 
+		'0', '1', '2', '3', '4', '5', '6', '7', 
+		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+    u8 n = 0;
+    for(u8 i = 0; i < len; i++)
+    {
+        rp[n++] = hex[sp[i] >> 4];
+        rp[n++] = hex[sp[i] & 0x0F];
+    }
+}
+
 extern void ys_rom_load_device_config(device_cfg_t *cfg);
 extern void ys_rom_save_device_config(device_cfg_t *cfg);
 

@@ -15,6 +15,7 @@
 #include "../../proj_lib/ble/ll/ll.h"
 #include "ys_uart.h"
 #include "ys_rom.h"
+#include "ys_switch.h"
 #include "ble_drv.h"
 #include "ble_app.h"
 #include "ser2ble.h"
@@ -37,6 +38,8 @@ void ser2ble_init(void)
 	ble_app_init();
 	ys_uart_init(device_config.baudrate);
 	sertx_ptr = ys_uart_get_txaddr();
+
+	ys_switch_register(SW_CFG, SW_CFG_PIN, ser2ble_cfg_key_handler);
 }
 
 _attribute_ram_code_ void ser2ble_process(void)

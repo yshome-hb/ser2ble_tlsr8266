@@ -134,7 +134,7 @@ void ble_drv_init(void)
 	bls_ota_registerResultIndicateCb(ble_ota_end_cb);
 #endif
 
-	device_led_init(BLE_LED, 1);
+	device_led_init(BLE_LED_PIN, BLE_LED_LEVEL);
 }
 
 void ble_start_advertis(u8 *adv_data, u8 adv_len, u8 *rsp_data, u8 rsp_len)

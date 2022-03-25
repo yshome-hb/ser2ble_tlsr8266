@@ -12,24 +12,10 @@
  *******************************************************************************************************/
 #include "../../proj/tl_common.h"
 #include "../../proj_lib/rf_drv_8266.h"
-#include "../../proj_lib/ble/blt_config.h"
 #include "ys_uart.h"
 #include "ys_rom.h"
 
 device_cfg_t device_config;
-
-static void ascii_to_hex(u8 *rp, u8 *sp, u8 len)
-{
-    static const u8 hex[16] = { 
-		'0', '1', '2', '3', '4', '5', '6', '7', 
-		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-    u8 n = 0;
-    for(u8 i = 0; i < len; i++)
-    {
-        rp[n++] = hex[sp[i] >> 4];
-        rp[n++] = hex[sp[i] & 0x0F];
-    }
-}
 
 void ys_rom_load_device_config(device_cfg_t *cfg)
 {
@@ -42,9 +28,7 @@ void ys_rom_load_device_config(device_cfg_t *cfg)
 		recover_flag++;
 		memset(cfg->dev_name, 0, sizeof(cfg->dev_name));
 
-		u16 mac16 = *(volatile u16 *)CFG_ADR_MAC;
         strncpy((char *)cfg->dev_name, STRINGIFY(PRODUCT_NAME), strlen(STRINGIFY(PRODUCT_NAME)));
-        ascii_to_hex(cfg->dev_name + strlen(STRINGIFY(PRODUCT_NAME)), (u8 *)&mac16, 2);
 		cfg->dev_name[19] = 0;		
 	}
 	

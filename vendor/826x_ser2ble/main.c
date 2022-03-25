@@ -54,9 +54,9 @@ int main (void)
 
 	rf_drv_init(CRYSTAL_TYPE);
 
-	ser2ble_init();
-
 	ys_switch_init();
+
+	ser2ble_init();
 
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
@@ -65,8 +65,6 @@ int main (void)
 #endif
 
     irq_enable();
-
-	ys_switch_register(SW_CFG, GPIO_PF1, ser2ble_cfg_key_handler);
 
 	YS_LOG("main start");
 

@@ -32,8 +32,8 @@ extern "C" {
 #define BLE_PM_ENABLE					0
 #define BLE_OTA_ENABLE                  1
 
-#define LED_ON_LEVEL                    1  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
-#define	BLE_LED		                    GPIO_PA5
+#define BLE_LED_LEVEL                   1  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
+#define	BLE_LED_PIN		                GPIO_PA5
 
 /////////////////// Clock  /////////////////////////////////
 #define CLOCK_SYS_TYPE  		        CLOCK_TYPE_PLL	//  one of the following:  CLOCK_TYPE_PLL, CLOCK_TYPE_OSC, CLOCK_TYPE_PAD, CLOCK_TYPE_ADC

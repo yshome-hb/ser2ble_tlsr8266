@@ -238,11 +238,13 @@ void ble_app_init ()
 	ble_drv_init();
 	bls_att_setAttributeTable((u8 *)blenus_attributes);
 
+	u16 mac16 = *(volatile u16 *)CFG_ADR_MAC;
 	u8 name_len = strlen(device_config.dev_name);
 	memcpy(adv_data_raw + ADV_DEVICE_NAME_POS + 2, device_config.dev_name, name_len);
-	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 1;
+    ascii_to_hex(adv_data_raw + ADV_DEVICE_NAME_POS + 2 + name_len, (u8 *)&mac16, 2);
+	adv_data_raw[ADV_DEVICE_NAME_POS] = name_len + 5;
 
-	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+2, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+2);
+	ble_start_advertis(adv_data_raw, name_len+ADV_DEVICE_NAME_POS+6, adv_data_raw+ADV_DEVICE_NAME_POS, name_len+6);
 	//blc_att_registerMtuSizeExchangeCb((att_mtuSizeExchange_callback_t *)&mtu_size_exchange_func);
 }
 
