@@ -92,8 +92,10 @@ int ble_nus_cmd_handler(u8 *data, u8 len)
 	if((len == 2) && (data[0] == 0x0B)){
 		if(data[1] <= UART_BAUD_230400){
 			ys_uart_set_baud(data[1]);
-			device_config.baudrate = data[1];
-			ys_rom_save_device_config(&device_config);
+			if(device_config.baudrate != data[1]){
+				device_config.baudrate = data[1];
+				ys_rom_save_device_config(&device_config);
+			}
 		}
 	}
 
