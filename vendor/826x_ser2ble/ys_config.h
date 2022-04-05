@@ -32,7 +32,7 @@ extern "C" {
 #define BLE_PM_ENABLE					0
 #define BLE_OTA_ENABLE                  1
 
-#define BLE_LED_LEVEL                   1  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
+#define BLE_LED_LEVEL                   0  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
 #define	BLE_LED_PIN		                GPIO_PA5
 
 /////////////////// Clock  /////////////////////////////////
@@ -57,7 +57,7 @@ extern "C" {
 #define PRODUCT_NAME 			    SER2BLE
 
 /////////////////// gpio pin //////////////////////////////
-#define SW_CFG_PIN                 GPIO_PF1 
+#define SW_CFG_PIN                 GPIO_PD5 
 
 
 /////////////////// PRINT DEBUG INFO ///////////////////////

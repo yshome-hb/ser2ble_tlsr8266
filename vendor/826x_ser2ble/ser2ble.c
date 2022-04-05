@@ -27,17 +27,41 @@
 MYFIFO_INIT(uart_rxfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
 MYFIFO_INIT(uart_txfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
 
+#define	BAUD1_LED_PIN		GPIO_PB6
+#define	BAUD2_LED_PIN		GPIO_PB5
+#define	BAUD3_LED_PIN		GPIO_PB0
 
 static u32 key_tick = 0;
 static u8 *sertx_ptr = NULL;
 
 int ser2ble_at_process(u8 *cmd, u8 len);
 
+static void ser2ble_show_baudrate(UART_BaudTypeDef baud)
+{
+	baud++;
+	gpio_write(BAUD1_LED_PIN, !(baud & 0x01));
+	gpio_write(BAUD2_LED_PIN, !(baud & 0x02));
+	gpio_write(BAUD3_LED_PIN, !(baud & 0x04));
+}
+
 void ser2ble_init(void)
 {
+    gpio_set_func(BAUD1_LED_PIN, AS_GPIO);
+    gpio_set_input_en(BAUD1_LED_PIN, 0);
+    gpio_set_output_en(BAUD1_LED_PIN, 1);
+
+    gpio_set_func(BAUD2_LED_PIN, AS_GPIO);
+    gpio_set_input_en(BAUD2_LED_PIN, 0);
+    gpio_set_output_en(BAUD2_LED_PIN, 1);
+
+    gpio_set_func(BAUD3_LED_PIN, AS_GPIO);
+    gpio_set_input_en(BAUD3_LED_PIN, 0);
+    gpio_set_output_en(BAUD3_LED_PIN, 1);
+
 	ble_app_init();
 	ys_uart_init(device_config.baudrate);
 	sertx_ptr = ys_uart_get_txaddr();
+	ser2ble_show_baudrate(device_config.baudrate);
 
 	ys_switch_register(SW_CFG, SW_CFG_PIN, ser2ble_cfg_key_handler);
 }
@@ -60,7 +84,7 @@ _attribute_ram_code_ void ser2ble_process(void)
 
 	if(key_tick && clock_time_exceed(key_tick, 3000000)){
 		key_tick = 0;
-		YS_LOG("long pressed");
+		ble_disconnect();
 	}
 }
 
@@ -96,6 +120,7 @@ int ble_nus_cmd_handler(u8 *data, u8 len)
 				device_config.baudrate = data[1];
 				ys_rom_save_device_config(&device_config);
 			}
+			ser2ble_show_baudrate(device_config.baudrate);
 		}
 	}
 
@@ -118,6 +143,7 @@ int ser2ble_cfg_key_handler(u8 val)
 		if(device_config.baudrate > UART_BAUD_230400)
 			device_config.baudrate = UART_BAUD_9600;
 		ys_uart_set_baud(device_config.baudrate);
+		ser2ble_show_baudrate(device_config.baudrate);
 		ys_rom_save_device_config(&device_config);
 	}
 
