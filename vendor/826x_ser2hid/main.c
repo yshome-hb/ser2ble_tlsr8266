@@ -35,6 +35,7 @@
 _attribute_ram_code_ void irq_handler(void)
 {
 	irq_blt_sdk_handler();
+	ys_uart_iqr_handler();
 }
 
 int main (void)
@@ -89,39 +90,39 @@ int main (void)
 	}
 }
 
-_attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
+_attribute_ram_code_ int ys_uart_recv_handler(unsigned char *data, unsigned char len)
 {
 	static const u8 hid_release[16] = {0};
-    if((rx_data->dma_len < 2) || (rx_data->data[0] != UART_MAGIC_BYTE))
+    if((len < 2) || (data[0] != UART_MAGIC_BYTE))
         return 0;
 
-	if(rx_data->data[1] != (rx_data->dma_len - 2))
+	if(data[1] != (len - 2))
 		return 0;
 
-	// if(!ys_protocol_checksum(rx_data->data+2, rx_data->data[1]))
+	// if(!ys_protocol_checksum(data+2, data[1]))
 	// 	return 0;
 
-	if(rx_data->data[1] == 1)
+	if(data[1] == 1)
 	{
-		ble_send_system(rx_data->data[2]);
+		ble_send_system(data[2]);
 	}
-	else if(rx_data->data[1] == 2)
+	else if(data[1] == 2)
 	{
-		ble_send_consumer((((u16)rx_data->data[3])<<8) | rx_data->data[2]);
+		ble_send_consumer((((u16)data[3])<<8) | data[2]);
 	}
-	else if(rx_data->data[1] == 8)
+	else if(data[1] == 8)
 	{
-		ble_send_keyboard(rx_data->data);
+		ble_send_keyboard(data);
 	}
-	else if(rx_data->data[1] == 15)
+	else if(data[1] == 15)
 	{
-		ble_send_nkro(rx_data->data);
+		ble_send_nkro(data);
 	}
-	else if(rx_data->data[1] == 4)
+	else if(data[1] == 4)
 	{
-		ble_send_mouse(rx_data->data);
+		ble_send_mouse(data);
 	}
-	else if(rx_data->data[1] == 0)
+	else if(data[1] == 0)
 	{
 		ble_send_keyboard(hid_release);
 		ble_send_mouse(hid_release);
@@ -130,7 +131,7 @@ _attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
 		ble_send_system(0);
 	}
 
-	ys_uart_send(1);
+	ys_uart_send(data, len);
 
-	return 1;
+	return 0;
 }
