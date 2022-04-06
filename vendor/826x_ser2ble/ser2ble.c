@@ -11,7 +11,6 @@
  *           
  *******************************************************************************************************/
 #include "../../proj/tl_common.h"
-#include "../../proj/common/string.h"
 #include "../../proj_lib/ble/ll/ll.h"
 #include "ys_uart.h"
 #include "ys_rom.h"
@@ -20,19 +19,11 @@
 #include "ble_app.h"
 #include "ser2ble.h"
 
-
-#define UART_FIFO_SIZE	22
-#define UART_FIFO_NUM	16
-
-MYFIFO_INIT(uart_rxfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
-MYFIFO_INIT(uart_txfifo, UART_FIFO_SIZE, UART_FIFO_NUM);
-
 #define	BAUD1_LED_PIN		GPIO_PB6
 #define	BAUD2_LED_PIN		GPIO_PB5
 #define	BAUD3_LED_PIN		GPIO_PB0
 
 static u32 key_tick = 0;
-static u8 *sertx_ptr = NULL;
 
 int ser2ble_at_process(u8 *cmd, u8 len);
 
@@ -60,7 +51,6 @@ void ser2ble_init(void)
 
 	ble_app_init();
 	ys_uart_init(device_config.baudrate);
-	sertx_ptr = ys_uart_get_txaddr();
 	ser2ble_show_baudrate(device_config.baudrate);
 
 	ys_switch_register(SW_CFG, SW_CFG_PIN, ser2ble_cfg_key_handler);
@@ -70,44 +60,28 @@ _attribute_ram_code_ void ser2ble_process(void)
 {
 	ys_uart_process();
 
-	u8 *fp = my_fifo_get(&uart_rxfifo);
-	if(fp != NULL){
-		if(ble_gap_connected()){
-			if(ble_nus_send_data(fp+2, fp[0]) == 0)
-				my_fifo_pop(&uart_rxfifo);
-			bls_pm_setManualLatency(0);
-		}else{
-			ser2ble_at_process(fp+2, fp[0]);
-			my_fifo_pop(&uart_rxfifo);
-		}
-	}
-
 	if(key_tick && clock_time_exceed(key_tick, 3000000)){
 		key_tick = 0;
 		ble_disconnect();
 	}
 }
 
-_attribute_ram_code_ int ys_uart_recv_handler(ysu_data_t *rx_data)
+_attribute_ram_code_ int ys_uart_recv_handler(unsigned char *data, unsigned char len)
 {
-	u8 *recv_ptr = rx_data->data;
-	u8 recv_len = 0;
-
-	while(rx_data->dma_len){
-		recv_len = min(20, rx_data->dma_len);
-		my_fifo_push(&uart_rxfifo, recv_ptr, recv_len);
-		rx_data->dma_len -= recv_len;
-		recv_ptr += recv_len;
+	int ret = 0;
+	if(ble_gap_connected()){
+		ret = ble_nus_send_data(data, len);
+		bls_pm_setManualLatency(0);
+	}else{
+		ser2ble_at_process(data, len);
 	}
-	
-	return 0;
+
+	return ret;
 }
 
 _attribute_ram_code_ int ble_nus_recv_handler(u8 *data, u8 len)
 {
-	u8 *uart_data = ys_uart_get_txaddr();
-	memcpy(uart_data, data, len);
-	ys_uart_send(len);
+	ys_uart_send(data, len);
 	return 0;
 }
 
@@ -152,7 +126,8 @@ int ser2ble_cfg_key_handler(u8 val)
 
 int ser2ble_at_process(u8 *cmd, u8 len)
 {
-	int sertx_idx = 0;
+	u8 sertx_buf[32] = {0};
+	u8 sertx_idx = 0;
 
 	if(len < 4)
 		return 0;
@@ -164,14 +139,14 @@ int ser2ble_at_process(u8 *cmd, u8 len)
 	len -= 4;
 
 	if(len == 0){
-		sertx_ptr[sertx_idx++] = 'O';
-		sertx_ptr[sertx_idx++] = 'K';
+		sertx_buf[sertx_idx++] = 'O';
+		sertx_buf[sertx_idx++] = 'K';
 	}
 
 	if(sertx_idx > 0){
-		sertx_ptr[sertx_idx++] = '\r';
-		sertx_ptr[sertx_idx++] = '\n';
-		ys_uart_send(sertx_idx);
+		sertx_buf[sertx_idx++] = '\r';
+		sertx_buf[sertx_idx++] = '\n';
+		ys_uart_send(sertx_buf, sertx_idx);
 	}
 
 	return sertx_idx;

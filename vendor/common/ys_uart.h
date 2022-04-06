@@ -25,17 +25,12 @@ typedef enum {
 	UART_BAUD_230400,
 }UART_BaudTypeDef;
 
-typedef struct{
-	unsigned int dma_len;       // dma len must be 4 byte
-	unsigned char data[1];
-}ysu_data_t;
-
+extern void ys_uart_iqr_handler(void);
+extern int ys_uart_recv_handler(unsigned char *data, unsigned char len);
 extern void ys_uart_set_baud(UART_BaudTypeDef baud);
 extern void ys_uart_init(UART_BaudTypeDef baud);
 extern void ys_uart_process(void);
-extern int ys_uart_recv_handler(ysu_data_t *data);
-extern unsigned char *ys_uart_get_txaddr(void);
-extern unsigned char ys_uart_send(unsigned char length);
+extern int ys_uart_send(unsigned char *data, unsigned char len);
 
 
 #endif /* _YS_UART_H_ */

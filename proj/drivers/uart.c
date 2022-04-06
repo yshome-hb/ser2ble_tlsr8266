@@ -181,11 +181,12 @@ unsigned char uart_Init(unsigned short uartCLKdiv, unsigned char bwpc, UART_Pari
 void uart_DmaModeInit(unsigned char dmaTxIrqEn, unsigned char dmaRxIrqEn)
 {
 	//1.enable UART DMA mode
-	BM_SET(reg_uart_ctrl0, FLD_UART_RX_DMA_EN | FLD_UART_TX_DMA_EN);
+	if(dmaRxIrqEn) BM_SET(reg_uart_ctrl0, FLD_UART_RX_DMA_EN);
+	if(dmaTxIrqEn) BM_SET(reg_uart_ctrl0, FLD_UART_TX_DMA_EN);
 
     //2.config DMAx mode
-	BM_SET(reg_dma0_ctrl, FLD_DMA_WR_MEM); //set DMA0 mode to 0x01 for receive.write to memory
-	BM_CLR(reg_dma1_ctrl, FLD_DMA_WR_MEM); //set DMA1 mode to 0x00 for send. read from memory
+	if(dmaRxIrqEn) BM_SET(reg_dma0_ctrl, FLD_DMA_WR_MEM); //set DMA0 mode to 0x01 for receive.write to memory
+	if(dmaTxIrqEn) BM_CLR(reg_dma1_ctrl, FLD_DMA_WR_MEM); //set DMA1 mode to 0x00 for send. read from memory
 
 	//3.config dma irq
 	if(dmaRxIrqEn){

@@ -35,6 +35,7 @@
 _attribute_ram_code_ void irq_handler(void)
 {
 	irq_blt_sdk_handler();
+	ys_uart_iqr_handler();
 }
 
 int main (void)

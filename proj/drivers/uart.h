@@ -81,35 +81,35 @@ enum {
 
 #define CLK32M_UART9600         do{\
 									uart_Init(302,10,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK32M_UART115200       do{\
 									uart_Init(30,8,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART230400       do{\
 									uart_Init(9,6,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART115200       do{\
 									uart_Init(9,13,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART57600         do{\
 									uart_Init(30,8,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART38400         do{\
 									uart_Init(31,12,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART19200         do{\
 									uart_Init(118,6,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 #define CLK16M_UART9600         do{\
 									uart_Init(118,13,PARITY_NONE,STOP_BIT_ONE);\
-									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_EN);\
+									uart_DmaModeInit(UART_DMA_TX_IRQ_EN, UART_DMA_RX_IRQ_DIS);\
 								}while(0)
 
 //UART_TX/UART_RX gpio pin config
