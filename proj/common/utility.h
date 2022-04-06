@@ -164,5 +164,5 @@ int my_fifo_push (my_fifo_t *f, u8 *p, int n);
 void my_fifo_pop (my_fifo_t *f);
 u8 * my_fifo_get (my_fifo_t *f);
 
-#define		MYFIFO_INIT(name,size,n)		u8 name##_b[size * n]={0};my_fifo_t name = {size,n,0,0, name##_b}
+#define		MYFIFO_INIT(name,size,n)		__attribute__((aligned(4))) u8 name##_b[size * n]={0};my_fifo_t name = {size,n,0,0, name##_b}
 

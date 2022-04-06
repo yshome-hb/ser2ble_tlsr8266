@@ -78,9 +78,9 @@ extern "C" {
 //#define PC6_OUTPUT_ENABLE	        1       //mini_printf function contain this
 #define PULL_WAKEUP_SRC_PC6         PM_PIN_PULLUP_1M
 #else//__PROJECT_8266_FEATURE_TEST__
-#define DEBUG_INFO_TX_PIN           GPIO_PC6//G9 for 8266 EVK board(C1T53A20_V2.0)
-//#define PD3_OUTPUT_ENABLE	        1       //mini_printf function contain this
-#define PULL_WAKEUP_SRC_PC6         PM_PIN_PULLUP_1M
+#define DEBUG_INFO_TX_PIN           GPIO_PA1//G9 for 8266 EVK board(C1T53A20_V2.0)
+//#define PA1_OUTPUT_ENABLE	        1       //mini_printf function contain this
+#define PULL_WAKEUP_SRC_PA1         PM_PIN_PULLUP_1M
 #endif
 #endif
 

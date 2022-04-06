@@ -59,9 +59,8 @@ void uart_set_tx_busy_flag(){
 void uart_clr_tx_busy_flag(){
     #if(UART_CONTINUE_DELAY_EN)
     	uart_continue_delay_time = 0;
-    #else
-    	uart_tx_busy_flag = 0;
     #endif
+    uart_tx_busy_flag = 0;
 }
 
 void uart_set_tx_done_delay (u32 t)
