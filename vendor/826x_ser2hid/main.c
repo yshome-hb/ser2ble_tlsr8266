@@ -28,8 +28,9 @@
 #include "../../proj_lib/ble/ll/ll.h"
 #include "blt_led.h"
 #include "ys_rom.h"
+#include "ys_switch.h"
 #include "ble_app.h"
-#include "ys_uart.h"
+#include "ser2hid.h"
 
 
 _attribute_ram_code_ void irq_handler(void)
@@ -55,9 +56,7 @@ int main (void)
 
 	rf_drv_init(CRYSTAL_TYPE);
 
-	ble_app_init();
-
-	ys_uart_init(UART_BAUD_115200);
+	ser2hid_init();
 
 #if (MODULE_WATCHDOG_ENABLE)
     wd_stop();
@@ -75,9 +74,11 @@ int main (void)
 #endif
 		blt_sdk_main_loop();
 
-		ys_uart_process();
+		ser2hid_process();
 		
 		device_led_process();
+
+		ys_switch_scan();
 
     #if 0 //PRINT_DEBUG_INFO
 		static u32 tick = 0;
@@ -88,50 +89,4 @@ int main (void)
 		}
     #endif
 	}
-}
-
-_attribute_ram_code_ int ys_uart_recv_handler(unsigned char *data, unsigned char len)
-{
-	static const u8 hid_release[16] = {0};
-    if((len < 2) || (data[0] != UART_MAGIC_BYTE))
-        return 0;
-
-	if(data[1] != (len - 2))
-		return 0;
-
-	// if(!ys_protocol_checksum(data+2, data[1]))
-	// 	return 0;
-
-	if(data[1] == 1)
-	{
-		ble_send_system(data[2]);
-	}
-	else if(data[1] == 2)
-	{
-		ble_send_consumer((((u16)data[3])<<8) | data[2]);
-	}
-	else if(data[1] == 8)
-	{
-		ble_send_keyboard(data);
-	}
-	else if(data[1] == 15)
-	{
-		ble_send_nkro(data);
-	}
-	else if(data[1] == 4)
-	{
-		ble_send_mouse(data);
-	}
-	else if(data[1] == 0)
-	{
-		ble_send_keyboard(hid_release);
-		ble_send_mouse(hid_release);
-		ble_send_nkro(hid_release);
-		ble_send_consumer(0);
-		ble_send_system(0);
-	}
-
-	ys_uart_send(data, len);
-
-	return 0;
 }

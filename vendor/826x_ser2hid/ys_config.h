@@ -56,6 +56,9 @@ extern "C" {
 
 #define PRODUCT_NAME 			    SER2HID
 
+/////////////////// gpio pin //////////////////////////////
+#define SW_CFG_PIN                 GPIO_PD5 
+
 /////////////////// PRINT DEBUG INFO ///////////////////////
 /* 826x module's pin simulate as a uart tx, Just for debugging */
 #define PRINT_DEBUG_INFO            0//open/close myprintf

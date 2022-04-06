@@ -23,6 +23,13 @@
 #define	BAUD2_LED_PIN		GPIO_PB5
 #define	BAUD3_LED_PIN		GPIO_PB0
 
+#define	SER_GPIO0_PIN		GPIO_PA0
+#if PRINT_DEBUG_INFO
+#define	SER_GPIO1_PIN		GPIO_PF0
+#else
+#define	SER_GPIO1_PIN		GPIO_PA1
+#endif
+
 static u32 key_tick = 0;
 
 int ser2ble_at_process(u8 *cmd, u8 len);
@@ -48,6 +55,14 @@ void ser2ble_init(void)
     gpio_set_func(BAUD3_LED_PIN, AS_GPIO);
     gpio_set_input_en(BAUD3_LED_PIN, 0);
     gpio_set_output_en(BAUD3_LED_PIN, 1);
+
+    gpio_set_func(SER_GPIO0_PIN, AS_GPIO);
+    gpio_set_input_en(SER_GPIO0_PIN, 0);
+    gpio_set_output_en(SER_GPIO0_PIN, 1);
+
+    gpio_set_func(SER_GPIO1_PIN, AS_GPIO);
+    gpio_set_input_en(SER_GPIO1_PIN, 0);
+    gpio_set_output_en(SER_GPIO1_PIN, 1);
 
 	ble_app_init();
 	ys_uart_init(device_config.baudrate);
@@ -103,7 +118,8 @@ int ble_nus_cmd_handler(u8 *data, u8 len)
 
 int ble_nus_gpio_handler(u8 data)
 {
-
+	gpio_write(SER_GPIO0_PIN, data & 0x01);
+	gpio_write(SER_GPIO1_PIN, data & 0x02);
 	return 0;
 }
 
