@@ -17,6 +17,7 @@
 #include "../../proj/common/types.h"
 #include "ys_config.h"
 
+#define REPORT_ID_KEYBOARD_INPUT_BLE       	1   //!< Keyboard input report ID
 
 ///////////////////////////////////// ATT  HANDLER define ///////////////////////////////////////
 typedef enum
@@ -75,6 +76,32 @@ typedef enum
 	OTA_CMD_OUT_DP_H,						//UUID: telink ota uuid,  VALUE: otaData
 	OTA_CMD_OUT_DESC_H,						//UUID: 2901,	VALUE: otaName
 #endif
+
+/********HID**************************************************************************************/
+	HID_PS_H, 								//UUID: 2800, 	VALUE: uuid 1812
+
+	//protocol
+	HID_PROTOCOL_MODE_CD_H,					//UUID: 2803, 	VALUE:  			Prop: read | write_without_rsp	
+	HID_PROTOCOL_MODE_DP_H,					//UUID: 2A4E,	VALUE: protocolMode
+	
+	//normal keyboard input report
+	HID_KEYBOARD_REPORT_INPUT_CD_H,			//UUID: 2803, 	VALUE:  			Prop: Read | Notify
+	HID_KEYBOARD_REPORT_INPUT_DP_H,			//UUID: 2A4D, 	VALUE: bootKeyInReport
+	HID_KEYBOARD_REPORT_INPUT_CCB_H,		//UUID: 2902, 	VALUE: bootKeyInReportCCC
+	HID_KEYBOARD_REPORT_INPUT_REF_H,		//UUID: 2908    VALUE: REPORT_ID_KEYBOARD, TYPE_INPUT
+
+	// report map
+	HID_REPORT_MAP_CD_H,					//UUID: 2803, 	VALUE:  			Prop: Read
+	HID_REPORT_MAP_DP_H,					//UUID: 2A4B, 	VALUE: reportKeyIn
+	//HID_REPORT_MAP_EXT_REF_H,				//UUID: 2907 	VALUE: extService
+
+	//hid information
+	HID_INFORMATION_CD_H,					//UUID: 2803, 	VALUE:  			Prop: read
+	HID_INFORMATION_DP_H,					//UUID: 2A4A 	VALUE: hidInformation
+	
+	//control point
+	HID_CONTROL_POINT_CD_H,					//UUID: 2803, 	VALUE:  			Prop: write_without_rsp
+	HID_CONTROL_POINT_DP_H,					//UUID: 2A4C 	VALUE: controlPoint
 
 	ATT_END_H,
 

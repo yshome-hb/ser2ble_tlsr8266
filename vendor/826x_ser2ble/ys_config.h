@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /////////////////// MODULE /////////////////////////////////
-#define BLE_REMOTE_SECURITY_ENABLE      0
+#define BLE_REMOTE_SECURITY_ENABLE      1
 #define BLE_PM_ENABLE					0
 #define BLE_OTA_ENABLE                  1
 

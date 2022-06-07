@@ -55,7 +55,7 @@ static const u8 connParamChar[5] = {
 
 static const u8	devName[] = STRINGIFY(PRODUCT_NAME);
 
-static const u16 appearance = GAP_APPEARE_UNKNOWN;
+static const u16 appearance = 0x03c1;
 
 static gap_periConnectParams_t periConnParameters = {
 	BLE_CONN_INTERVAL_MIN, 
@@ -162,6 +162,89 @@ static const u8 otaName[] = {'O', 'T', 'A'};
 
 #endif
 
+//HID Service ......................................................................
+
+static const u16 hidServiceUUID = SERVICE_UUID_HUMAN_INTERFACE_DEVICE;
+static const u16 hidReportUUID  = CHARACTERISTIC_UUID_HID_REPORT;
+static const u16 reportRefUUID = GATT_UUID_REPORT_REF;
+static const u16 extReportRefUUID = GATT_UUID_EXT_REPORT_REF;
+
+// HID attribute values
+static const u8 protocolModeChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_PROTOCOL_MODE_DP_H), U16_HI(HID_PROTOCOL_MODE_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_PROTOCOL_MODE), U16_HI(CHARACTERISTIC_UUID_HID_PROTOCOL_MODE)
+};
+static const u8 reportKeyboardInChar[5] = {
+	CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+	U16_LO(HID_KEYBOARD_REPORT_INPUT_DP_H), U16_HI(HID_KEYBOARD_REPORT_INPUT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT), U16_HI(CHARACTERISTIC_UUID_HID_REPORT)
+};
+
+static const u8 hidReportMapChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(HID_REPORT_MAP_DP_H), U16_HI(HID_REPORT_MAP_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_REPORT_MAP), U16_HI(CHARACTERISTIC_UUID_HID_REPORT_MAP)
+};
+static const u8 hidInformationChar[5] = {
+	CHAR_PROP_READ,
+	U16_LO(HID_INFORMATION_DP_H), U16_HI(HID_INFORMATION_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_INFORMATION), U16_HI(CHARACTERISTIC_UUID_HID_INFORMATION)
+};
+static const u8 hidCtrlPointChar[5] = {
+	CHAR_PROP_WRITE_WITHOUT_RSP,
+	U16_LO(HID_CONTROL_POINT_DP_H), U16_HI(HID_CONTROL_POINT_DP_H),
+	U16_LO(CHARACTERISTIC_UUID_HID_CONTROL_POINT), U16_HI(CHARACTERISTIC_UUID_HID_CONTROL_POINT)
+};
+
+static u8 protocolMode = DFLT_HID_PROTOCOL_MODE;
+
+static u8 reportKeyboardIn[8] = {0};
+static u8 reportKeyboardInCCC[2] = {0};
+static u8 reportRefKeyboardIn[2] = { REPORT_ID_KEYBOARD_INPUT_BLE, HID_REPORT_TYPE_INPUT };
+
+const u8 hidInformation[] =
+{
+	U16_LO(0x0111), U16_HI(0x0111),    // bcdHID (USB HID version)
+	0x00,                              // bCountryCode
+	0x01                               // Flags
+};
+
+static u8 hidControlPoint;
+
+// HID Report Map characteristic
+static const u8 hidReportMap[] =
+{
+/***************** keyboard report in *****************/
+	0x05, 0x01,	 // Usage Page (Generic Desktop)
+	0x09, 0x06,	 // Usage (Keyboard)
+	0xA1, 0x01,	 // Collection: (Application)
+	0x85, REPORT_ID_KEYBOARD_INPUT_BLE,	 // Report Id (keyboard)
+				 // Modifier byte
+	0x05, 0x07,	 // Usage Page (Key Codes)
+	0x19, 0xE0,	 // Usage Min (224)  VK_CTRL:0xe0
+	0x29, 0xE7,	 // Usage Max (231)  VK_RWIN:0xe7
+	0x15, 0x00,	 // Log Min (0)
+	0x25, 0x01,	 // Log Max (1)
+	0x95, 0x08,	 // Report Count (8)
+	0x75, 0x01,	 // Report Size (1)   1 bit * 8
+	0x81, 0x02,	 // Input: (Data, Variable, Absolute)
+				 // Reserved byte
+	0x95, 0x01,	 // Report Count (1)
+	0x75, 0x08,	 // Report Size (8)
+	0x81, 0x01,	 // Input: (Constant)
+				 // Key arrays (6 bytes)
+	0x05, 0x07,	 // Usage Page (Key Codes)
+	0x19, 0x00,	 // Usage Min (0)
+	0x29, 0xF1,  // Usage Max (241)
+	0x15, 0x00,	 // Log Min (0)
+	0x25, 0xF1,	 // Log Max (241)
+	0x95, 0x06,	 // Report Count (6)
+	0x75, 0x08,	 // Report Size (8)
+	0x81, 0x00,	 // Input: (Data, Array)
+	0xC0,		 // End Collection
+};
+
 // TM : to modify
 static const attribute_t blenus_attributes[] = {
 
@@ -224,15 +307,42 @@ static const attribute_t blenus_attributes[] = {
 	{0, ATT_PERMISSIONS_READ, 2, sizeof(otaName), (u8*)(&userDescUUID), (u8*)(otaName), 0},
 #endif
 
+	/////////////////////////////////// HID Service /////////////////////////////////////////////////////////
+	{HID_CONTROL_POINT_DP_H - HID_PS_H + 1, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&primaryServiceUUID), (u8*)(&hidServiceUUID), 0},
+
+	// 0011 - 0012  protocol mode
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(protocolModeChar), (u8*)(&characterUUID), (u8*)(protocolModeChar), 0},		//prop
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(protocolMode), (u8*)(protocolModeChar+3), (u8*)(&protocolMode), 0},	//value
+
+	// 0013 - 0015  normal keyboard input report (char-val-client-ref)
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportKeyboardInChar), (u8*)(&characterUUID), (u8*)(reportKeyboardInChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportKeyboardIn), (u8*)(reportKeyboardInChar+3), (u8*)(reportKeyboardIn), 0},	//value
+	{0, ATT_PERMISSIONS_RDWR, 2, sizeof(reportKeyboardInCCC), (u8*)(&clientCharacterCfgUUID), (u8*)(reportKeyboardInCCC), 0},	//value
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(reportRefKeyboardIn), (u8*)(&reportRefUUID), (u8*)(reportRefKeyboardIn), 0},   //value
+
+	// 0023 - 0025 . report map: 3
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportMapChar), (u8*)(&characterUUID), (u8*)(hidReportMapChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidReportMap), (u8*)(hidReportMapChar+3), (u8*)(hidReportMap), 0},		//value
+	//{0, ATT_PERMISSIONS_RDWR, 2, sizeof(extServiceUUID),(u8*)(&extReportRefUUID), (u8*)(&extServiceUUID), 0},	//value
+
+	// 0026 - 0027 . hid information: 2
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidInformationChar), (u8*)(&characterUUID), (u8*)(hidInformationChar), 0},	//prop
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidInformation), (u8*)(hidInformationChar+3), (u8*)(hidInformation), 0},	//value
+
+	// 0028 - 0029 . control point: 2
+	{0, ATT_PERMISSIONS_READ, 2, sizeof(hidCtrlPointChar), (u8*)(&characterUUID), (u8*)(hidCtrlPointChar), 0},	//prop
+	{0, ATT_PERMISSIONS_WRITE, 2, sizeof(hidControlPoint), (u8*)(hidCtrlPointChar+3), (u8*)(&hidControlPoint), 0},	//value
+
 };
 
 void ble_app_init ()
 {
-#define ADV_DEVICE_NAME_POS   		7
+#define ADV_DEVICE_NAME_POS   		11
 #define ADV_DEVICE_NAME_MAX_LEN  	18
 	u8 adv_data_raw[31] = {
 		0x02, 0x01, 0x05, 		// BLE limited discoverable mode and BR/EDR not supported
-		0x03, 0x03, 0x01, 0x00,	// incomplete list of service class UUIDs (0x0001)
+		0x03, 0x19, 0xc1, 0x03, // 384, Generic Remote Control, Generic category
+		0x03, 0x03, 0x12, 0x18,	// incomplete list of service class UUIDs (0x1812, 0x180F)
 		19, 0x09, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, };
 
 	ble_drv_init();

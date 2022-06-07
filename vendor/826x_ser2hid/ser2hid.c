@@ -65,36 +65,36 @@ _attribute_ram_code_ void ser2hid_process(void)
 _attribute_ram_code_ int ys_uart_recv_handler(unsigned char *data, unsigned char len)
 {
 	static const u8 hid_release[16] = {0};
-    if((len < 2) || (data[0] != UART_MAGIC_BYTE))
+    if((len < 4) || (data[0] != UART_MAGIC_BYTE))
         return 0;
 
-	if(data[1] != (len - 2))
+	if(data[2] != (len - 4))
 		return 0;
 
-	// if(!ys_protocol_checksum(data+2, data[1]))
+	// if(!ys_protocol_checksum(data, len))
 	// 	return 0;
 
-	if(data[1] == 1)
-	{
-		ble_send_system(data[2]);
-	}
-	else if(data[1] == 2)
-	{
-		ble_send_consumer((((u16)data[3])<<8) | data[2]);
-	}
-	else if(data[1] == 8)
+	if(data[1] == 0x71)
 	{
 		ble_send_keyboard(data);
 	}
-	else if(data[1] == 15)
-	{
-		ble_send_nkro(data);
-	}
-	else if(data[1] == 4)
+	else if(data[1] == 0x72)
 	{
 		ble_send_mouse(data);
 	}
-	else if(data[1] == 0)
+	else if(data[1] == 0x73)
+	{
+		ble_send_system((((u16)data[4])<<8) | data[3]);
+	}
+	else if(data[1] == 0x74)
+	{
+		ble_send_consumer((((u16)data[4])<<8) | data[3]);
+	}
+	else if(data[1] == 0x76)
+	{
+		ble_send_nkro(data);
+	}
+	else if(data[1] == 0x7F)
 	{
 		ble_send_keyboard(hid_release);
 		ble_send_mouse(hid_release);
