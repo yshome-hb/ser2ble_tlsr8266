@@ -25,7 +25,7 @@ typedef enum {
 	UART_BAUD_230400,
 }UART_BaudTypeDef;
 
-extern void ys_uart_iqr_handler(void);
+extern void ys_uart_irq_handler(void);
 extern int ys_uart_recv_handler(unsigned char *data, unsigned char len);
 extern void ys_uart_set_baud(UART_BaudTypeDef baud);
 extern void ys_uart_init(UART_BaudTypeDef baud);

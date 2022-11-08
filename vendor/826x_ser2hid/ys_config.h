@@ -27,14 +27,6 @@
 extern "C" {
 #endif
 
-/////////////////// MODULE /////////////////////////////////
-#define BLE_REMOTE_SECURITY_ENABLE      1
-#define BLE_PM_ENABLE					0
-#define BLE_OTA_ENABLE                  1
-
-#define BLE_LED_LEVEL                   0  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
-#define	BLE_LED_PIN		                GPIO_PA5
-
 /////////////////// Clock  /////////////////////////////////
 #define CLOCK_SYS_TYPE  		        CLOCK_TYPE_PLL	//  one of the following:  CLOCK_TYPE_PLL, CLOCK_TYPE_OSC, CLOCK_TYPE_PAD, CLOCK_TYPE_ADC
 #define CLOCK_SYS_CLOCK_HZ  	        16000000
@@ -43,11 +35,19 @@ extern "C" {
 #define MODULE_WATCHDOG_ENABLE		    0
 #define WATCHDOG_INIT_TIMEOUT		    500  //ms
 
-/////////////////// rf tx power //////////////////////////////
-#define DEFAULT_NORMAL_TX_POWER   	RF_POWER_8dBm
-
 /////////////////// cfg address in flash //////////////////////////////
-#define CFG_ADDR_DEVICE   		    0x7A000
+#define CFG_ADDR_DEVICE   		        0x7A000
+
+/////////////////// rf tx power //////////////////////////////
+#define DEFAULT_NORMAL_TX_POWER   	    RF_POWER_8dBm
+
+/////////////////// MODULE /////////////////////////////////
+#define BLE_REMOTE_SECURITY_ENABLE      1
+#define BLE_PM_ENABLE					0
+#define BLE_OTA_ENABLE                  1
+
+#define BLE_LED_LEVEL                   0  //1 indicate high level turn on LED; 0 indicate low level will turn off LED. based on actual spec.
+#define	BLE_LED_PIN		                GPIO_PA5
 
 /////////////////// product information //////////////////////////////
 #define ID_VENDOR				    0x248A

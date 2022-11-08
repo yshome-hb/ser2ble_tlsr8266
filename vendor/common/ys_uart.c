@@ -23,7 +23,7 @@ static unsigned char *wlen = NULL;
 static u32 uart_rx_tick = 0;
 static u32 uart_rx_idle = 0;
 
-_attribute_ram_code_ void ys_uart_iqr_handler(void)
+_attribute_ram_code_ void ys_uart_irq_handler(void)
 {
     if( GET_UART_NOT_DMA_IRQ() ){
 		*wptr = uart_notDmaModeRevData();
